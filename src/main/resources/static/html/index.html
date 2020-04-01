@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小牛要飞</title>
+    <link href="../css/main.css" rel="stylesheet"/>
+    <script src="../js/jquery-1.8.3.js"></script>
+    <script src="../js/js-cookie.js"></script>
+    <script src="../js/main.js"></script>
+    <!--<script src="../js/hkdg.js"></script>-->
+</head>
+<script>
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    window.onresize = function () {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        $("body").css("font-size", width / 1920 * 22 + "px");
+    };
+
+</script>
+<style type="text/css">
+    body {
+        overflow: hidden;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-size: 22px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #836b49;
+    }
+
+    #main {
+        position: absolute;
+        display: block;
+        /*width: calc(100% - 0px);*/
+        /*height: calc(100% - 0px);*/
+        width: 100%;
+        height: 100%;
+        background: #EEE7E1;
+    }
+
+    #main_right {
+        top: 0px;
+        left: 307px;
+        position: absolute;
+        min-width: 800px;
+        height: 100%;
+    }
+
+    #main_left {
+        top: 0px;
+        position: relative;
+        background: #FFF;
+        height: 100%;
+        min-width: 288px;
+        min-height: 685px;
+        margin-right: 26px;
+    }
+
+    .right_top {
+        top: 0px;
+        position: relative;
+        height: 15%;
+        min-height: 157px;
+        max-height: 15%;
+        background: #FFF;
+        margin-bottom: 1%;
+        margin-right: 20px;
+    }
+
+    .right_main {
+        margin-right: 20px;
+        position: relative;
+        background: #FFF;
+        margin-bottom: 0px;
+        height: 100%;
+    }
+
+    .main_left_head_image {
+        text-align: center;
+        padding-top: 30px;
+        padding-bottom: 54px;
+    }
+
+    .main_left_menu {
+        text-align: center;
+        border-bottom: 2px solid #f4f4f4;
+    }
+
+    .main_left_menu li {
+        margin-top: 30px;
+        padding-bottom: 32px;
+        border-bottom: 2px solid #f4f4f4;
+        /*text-align: left;*/
+    }
+
+    .main_left_menu_img {
+        margin-right: 15px;
+    }
+
+    .right_top {
+
+    }
+
+    .right_top_menu {
+        border-bottom: solid 2px rgba(233, 216, 199, 0.3);
+        padding-top: 1.5%;
+        padding-bottom: 3%;
+    }
+
+    .right_top_menu li {
+        float: left;
+        list-style: none;
+        margin-left: 1.5%;
+
+    }
+
+    .right_top_menu_li_hover {
+        font-weight: bold;
+        border-bottom: 3px solid #836b49;
+    }
+
+    .right_top_button li {
+        margin-top: 1.5%;
+        float: left;
+        list-style: none;
+        margin-left: 40px;
+    }
+
+    .right_top_button li:first-child {
+        margin-left: 40px;
+    }
+
+    .right_top_button li a {
+        color: #d3c1a8;
+    }
+
+    .table {
+    }
+
+    #tab {
+        width: 100%;
+        border-collapse: collapse;
+        border: 2px solid #0094ff;
+        margin: 10px auto;
+        text-align: center;
+    }
+
+    #tab th, tr, td {
+        padding: 10px;
+        border: 1px solid #0094ff;
+    }
+</style>
+<body>
+<div id="main">
+    <div id="main_left">
+        <div class="main_left_head_image">
+            <img src="../images/index/logo.png">
+        </div>
+        <div class="main_left_menu">
+            <ul>
+                <li><img class="main_left_menu_img" src="../images/index/lastuse.png"/><a href="javascript:;" onclick="console.log($(this))">最近使用</a></li>
+                <li><img class="main_left_menu_img" src="../images/index/allfile.png"/><a href="javascript:;" onclick="console.log($(this))">全部文件</a></li>
+                <li><img class="main_left_menu_img" src="../images/index/image.png"/><a href="javascript:;" onclick="console.log($(this))">图片&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li><img class="main_left_menu_img" src="../images/index/file.png"/><a href="javascript:;" onclick="console.log($(this))">文件&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li><img class="main_left_menu_img" src="../images/index/video.png"/><a href="javascript:;" onclick="console.log($(this))">视频&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="main_right">
+        <div class="right_top">
+            <div class="right_top_menu">
+                <ul>
+                    <li class="right_top_menu_li_hover "><a href="javascript:;" onclick="console.log($(this))">首页</a></li>
+                    <li ><a href="javascript:;" onclick="console.log($(this))">传输列表</a></li>
+                    <li class="item_end"><a href="javascript:;" onclick="console.log($(this))"><span id="userName"></span></a></li>
+                </ul>
+            </div>
+            <div class="right_top_button">
+                <ul>
+                    <li><img class="main_left_menu_img" src="../images/index/upload.png"/><a href="upload.html">上传</a></li>
+                    <li><img class="main_left_menu_img" src="../images/index/download.png"/><a href="javascript:;" onclick="console.log($(this))">下载</a></li>
+                    <li><img class="main_left_menu_img" src="../images/index/delete.png"/><a href="javascript:;" onclick="console.log($(this))">删除</a></li>
+                    <li><img class="main_left_menu_img" src="../images/index/createfolder.png"/><a href="javascript:;" onclick="console.log($(this))">新建文件夹</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="right_main">
+            <div class="table">
+                <table id="tab">
+                    <thead>
+                    <th><input type="checkbox" name="allCheck"/></th>
+                    <th>名称</th>
+                    <th>大小</th>
+                    <th>类型</th>
+                    <th>上传时间</th>
+                    <th>操作</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
+<div id="bgdiv"></div>
+<p align="center">
+    尊敬的&nbsp;&nbsp;<span id="name"></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span id="fileCount"></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span><a href="upload.html">上传</a></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span><a href="/index.html">退出</a></span>
+</p>
+<div id="fileDiv" align="center">
+
+</div>-->
+<script>
+    var throughputDisplay = function (data) {
+        if (data < 1200) {
+            return data + " B";
+        } else if (data < 1200 * 1024) {
+            return (data / 1024).toFixed(2) + " KB";
+        } else if (data < 1200 * 1024 * 1024) {
+            return (data / 1024 / 1024).toFixed(2) + " MB";
+        } else if (data < 1200 * 1024 * 1024 * 1024) {
+            return (data / 1024 / 1024 / 1024).toFixed(2) + " GB";
+        } else {
+            return (data / 1024 / 1024 / 1024 / 1024).toFixed(2) + " TB";
+        }
+    };
+
+    Date.prototype.Format = function (formatStr) {
+        var str = formatStr;
+        var Week = ['日', '一', '二', '三', '四', '五', '六'];
+
+        str = str.replace(/yyyy|YYYY/, this.getFullYear());
+        str = str.replace(/yy|YY/, (this.getYear() % 100) > 9 ? (this.getYear() % 100).toString() : '0' + (this.getYear() % 100));
+
+        str = str.replace(/MM/, this.getMonth() > 9 ? this.getMonth().toString() : '0' + this.getMonth());
+        str = str.replace(/M/g, this.getMonth());
+
+        str = str.replace(/w|W/g, Week[this.getDay()]);
+
+        str = str.replace(/dd|DD/, this.getDate() > 9 ? this.getDate().toString() : '0' + this.getDate());
+        str = str.replace(/d|D/g, this.getDate());
+
+        str = str.replace(/hh|HH/, this.getHours() > 9 ? this.getHours().toString() : '0' + this.getHours());
+        str = str.replace(/h|H/g, this.getHours());
+        str = str.replace(/mm/, this.getMinutes() > 9 ? this.getMinutes().toString() : '0' + this.getMinutes());
+        str = str.replace(/m/g, this.getMinutes());
+
+        str = str.replace(/ss|SS/, this.getSeconds() > 9 ? this.getSeconds().toString() : '0' + this.getSeconds());
+        str = str.replace(/s|S/g, this.getSeconds());
+
+        return str;
+    }
+    $(function () {
+        var username = $.cookie("username");
+        var uuid = $.cookie("uuid");
+        $("#userName").text(username);
+        if (!uuid) {
+            window.location.href = "../index.html";
+        }
+        $.get("/user/userFiles/" + uuid + "?type=image", function (res) {
+            if (res.code == 0) {
+                var files = res.data.files;
+                if (files != null && files.length > 0) {
+                    var html = "";
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        //id: 3, length: 2456929, name: "4d76fda03be595dc02f6e53e93e8219f.jpg", time: 1564212437000, type: "jpg"
+                        html += "<tr><td><input type='checkbox' name='itemCheck'/></td><td>" + file.name + "</td><td>" + throughputDisplay(file.length) + "</td><td>" + file.type + "</td><td>" + new Date(file.time).Format("yyyy-MM-dd HH:mm:ss") + "</td><td><a href='javascript:download(" + file.id + ")'>下载</a></td></tr>";
+                    }
+                    $("#tab").find("tbody").append(html);
+                    $("#fileCount").text("上传文件个数：" + files.length);
+                } else {
+                    alert("暂无数据");
+                    $("#fileDiv").append("暂无文件");
+                    $("#fileCount").text("上传文件个数：0");
+                }
+            } else if (res.code == 500) {
+                window.location.href = "../index.html";
+            }
+        });
+    });
+
+    function download(id) {
+        if($.cookie("uuid")){
+            window.location.href = "/file/download/" + id + "?uuid=" + $.cookie("uuid");
+        }else{
+            alert("请先登录");
+            window.location.href = "../index.html";
+        }
+    }
+
+</script>
+</body>
+</html>

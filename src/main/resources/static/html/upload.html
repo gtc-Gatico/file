@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传文件</title>
+    <script src="../js/jquery-1.8.3.js"></script>
+    <script src="../js/js-cookie.js"></script>
+    <!--<script src="../js/hkdg.js"></script>-->
+</head>
+<style type="text/css">
+    /* *{
+         color: #FFF;
+     }*/
+
+    #bgdiv {
+        height: calc(100% - 0px);
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -888;
+        background: rgba(255, 255, 255, 0.25);
+    }
+</style>
+<body>
+<div id="bgdiv"></div>
+<div align="center">
+    单文件上传：
+    <form id="fileForm" action="/file/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"/>
+        <span id="button"><a style="cursor: pointer">点击上传</a></span>
+    </form>
+</div>
+<div align="center">
+    多文件上传：
+    <form id="multForm" action="/file/upload/batch" method="post" enctype="multipart/form-data">
+        <input type="file" multiple name="file"/>
+        <span id="multbutton"><a style="cursor: pointer">点击上传</a></span>
+    </form>
+    <a href="/html/index.html">返回</a>
+</div>
+<script>
+    $(function () {
+        $("#button").click(function () {
+            var formData = new FormData($("#fileForm")[0]);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                url: "/file/upload?uuid=" + $.cookie("uuid"),
+                contentType: false,
+                processData: false,
+            }).success(function (res) {
+                if (res.code == 0) {
+                    window.location.href  = "/html/index.html";
+                }
+            })
+        });
+
+        $("#multbutton").click(function () {
+            var formData = new FormData($("#multForm")[0]);
+            $.ajax({
+                type: "POST",
+                data: formData,
+                url: "/file/upload/batch?uuid=" + $.cookie("uuid"),
+                contentType: false,
+                processData: false,
+            }).success(function (res) {
+                if (res.code == 0) {
+                    window.location.href = "/html/index.html";
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>

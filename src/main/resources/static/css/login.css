@@ -1,0 +1,132 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-image: url("../images/login/background.png");
+    background-size: 100% auto;
+
+}
+.login_main{
+    display: block;
+    position: absolute;
+    height: 70%;
+    margin: 7.5% 0 auto 141px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-left: 82px;
+}
+.login_top{
+    position: relative;
+    width: 98px;
+    height: 98px;
+    border-radius: 50%;
+    background-image: linear-gradient(45deg,
+    #303060 0%,
+    #3678b3 100%);
+    margin-top: 66px;
+}
+.login_top>img{
+    margin: 15px 22px;
+}
+.goback{
+    margin-top: 39px;
+    height: 32px;
+    font-family: "59--Regular";
+    font-size: 30px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 49px;
+    letter-spacing: 0px;
+    color: #203052;
+}
+.golabel{
+    margin-top: 9px;
+    height: 26px;
+    font-family: PingFang-SC-Regular;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 49px;
+    letter-spacing: 0px;
+    color: #203052;
+    opacity: 0.6;
+}
+.login-form  input{
+    vertical-align: bottom;
+    font-size: 20px;
+    position: relative;
+    left: -100px;
+    width: 438px!important;
+    height: 60px;
+    border: solid 1px #f4f8f7;
+
+}
+.mt91{
+    margin-top: 71px;
+}
+.login-form{
+    margin: 0 auto;
+}
+.login-form>.login_input>div{
+    float: left;
+}
+.login-form>.login_input>span{
+    font-family: PingFang-SC-Medium;
+    font-size: 22px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 49px;
+    letter-spacing: 0px;
+    color: #9289a6;
+    position: relative;
+    z-index: 2;
+    width: 50px;
+}
+.forget_pwd{
+    margin-top: 3px;
+    position: relative;
+    font-family: PingFang-SC-Medium;
+    font-size: 24px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 49px;
+    letter-spacing: 0px;
+    color: #2d245c;
+}
+.register{
+    font-size: 24px;
+}
+.login_submit{
+    margin-top: 38px;
+    position: relative;
+    width: 438px;
+    height: 60px;
+    background-color: #2d245c;
+    box-shadow: 0px 5px 15px 0px
+    rgba(45, 36, 92, 0.5);
+    border-radius: 8px;
+    font-family: PingFang-SC-Medium;
+    font-size: 26px;
+    font-weight: normal;
+    font-stretch: normal;
+    color: #ffffff;
+}
+.login-right{
+    top: 0px;
+    left:550px ;
+    position: absolute;
+    display: block;
+    float: left;
+    width: 170%;
+    height: 100%;
+    background-color:#ffffff1a;
+    border-radius: 10px;
+}
+.login-right>img{
+    margin-left: 100px;
+}
+.span_focus{
+    top:-23px;
+    font-size: 10px !important;
+}

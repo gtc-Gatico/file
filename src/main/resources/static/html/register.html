@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <script src="../js/jquery-1.8.3.js"></script>
+    <script src="../js/js-cookie.js"></script>
+    <script src="../js/main.js"></script>
+</head>
+<body>
+<div>
+    <label>用户名：</label><input name="userName" type="text"/>
+    <label>密码：</label><input name="userPwd" type="password"/>
+    <button id="register">注册</button>
+</div>
+<script>
+    $(function () {
+        $("#register").click(function () {
+            var name = $("input[name='userName']").val();
+            var password = $("input[name='userPwd']").val();
+            var data = {
+                name: name,
+                password: $.md5($.md5(password))
+            };
+            $.post("/user/register", data, function (res) {
+                if (res.code == 0) {
+                    $.cookie("username", res.data.nickname);
+                    $.cookie("uuid", res.data.uuid);
+                    alert(res.msg);
+                    window.location.href = "index.html";
+                } else {
+                    alert(res.msg);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

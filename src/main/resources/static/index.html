@@ -1,0 +1,68 @@
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>文件助手</title>
+    <link href="css/login.css" rel="stylesheet">
+    <script src="js/jquery-1.8.3.js"></script>
+    <script src="js/js-cookie.js"></script>
+    <script src="js/jquery.md5.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+<div class="login_main">
+    <div class="login_top">
+        <img src="images/login/rabbit.png" draggable="false">
+    </div>
+    <div class="login-form">
+        <p class="goback">欢迎回来</p>
+        <p class="golabel">hello，您的小仙女回来了</p>
+        <div class="login_input mt91" align="left">
+            <span>输入账号</span>
+            <input type="text" aria-autocomplete="none" autocomplete="none" onautocomplete="javascript:void(0);" name="name"/>
+        </div>
+        <div class="login_input">
+            <span>输入密码</span>
+            <input type="password" name="password" id="password"/>
+        </div>
+        <div class="forget_pwd"><a href="#">忘记密码？</a></div>
+        <div class="register"><a href="html/register.html">注册</a></div>
+        <button class="login_submit" id="submit">登录</button>
+    </div>
+    <div class="login-right">
+        <img src="images/login/surprised.png" draggable="false">
+    </div>
+</div>
+<script>
+    $(function () {
+        $("input").hover(function () {
+            $(this).prev().addClass("span_focus");
+            $(this).css("left", "-60px");
+            $(this).css("margin-right", "40px");
+        }, function () {
+            if ($(this).val() != "") {
+                return;
+            }
+            $(this).css("left", "-100px");
+            $(this).prev().removeClass("span_focus");
+            $(this).css("margin-right", "0px");
+        });
+        $("#submit").click(function () {
+            var name = $("input[name='name']").val();
+            var password = $("input[name='password']").val();
+            var data = {
+                name: name,
+                password: $.md5($.md5(password))
+            };
+            $.post("user/login", data, function (res) {
+                if (res.code == 0) {
+                    $.cookie("username", res.data.user.userName, {expires: 10});
+                    $.cookie("uuid", res.data.user.uuid, {expires: 10});
+                    window.location.href = "html/index.html";
+                }
+                alert(res.msg);
+            });
+        });
+    });
+</script>
+</body>
+</html>
