@@ -123,6 +123,9 @@ public class MD5Utils {
         return encrypt(str, salt);
     }
 
+    public static void main(String[] args) {
 
+        System.out.println(MD5Utils.SHA1("9706320596b0b326991c4021fe641889"));
+    }
 
 }

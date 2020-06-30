@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class BaseVo {
     public static final Integer SUCCESS_CODE = 0;
-    private Integer code;
-    private String msg;
-    private Map data = new HashMap();
-
+    private Integer code = 0;
+    private String msg ="";
+    private Object data = new Object();
+    private Integer total=0;
     protected BaseVo() {
 
     }
@@ -75,16 +75,26 @@ public class BaseVo {
         this.msg = msg;
     }
 
-    public Map getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(String key, Object value) {
-        data.put(key, value);
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
     }
 
     @Override
     public String toString() {
         return JSONObject.toJSONString(this);
     }
+
+
 }

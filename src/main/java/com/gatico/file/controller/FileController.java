@@ -1,8 +1,7 @@
 package com.gatico.file.controller;
 
+import com.gatico.file.bean.FileBean;
 import com.gatico.file.service.FileService;
-import com.gatico.file.service.UserService;
-import com.gatico.file.vo.BaseVo;
 import com.gatico.file.vo.DownLoadFileVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,19 +21,30 @@ import java.util.List;
 public class FileController extends BaseController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private FileService fileService;
 
+    @RequestMapping(value = "/files", method = RequestMethod.GET)
+    public ResponseEntity<Object> getUserFiles(FileBean fileBean, Integer pageIndex, Integer pageSize) {
+        return ResponseEntity.ok(fileService.getUserFile(fileBean, pageIndex, pageSize));
+    }
+
     @RequestMapping(value = "/download/{fileId}", method = RequestMethod.GET)
-    public ResponseEntity<Object> download(@PathVariable long fileId, String uuid) {
-        Boolean checkUser = userService.checkUser(uuid);
-        if (!checkUser) {
-            return ResponseEntity.ok(BaseVo.getErrorVo(500, "请先登录"));
-        }
+    public ResponseEntity<Object> download(@PathVariable long fileId) {
         HttpHeaders headers = new HttpHeaders();
-        DownLoadFileVo downLoadFileVo = fileService.downLoadFile(fileId, uuid);
+        DownLoadFileVo downLoadFileVo = fileService.downLoadFile(fileId);
+        try {
+            headers.setContentDispositionFormData("attachment", new String(downLoadFileVo.getFileName().getBytes("UTF-8"), "ISO8859-1"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return new ResponseEntity<>(downLoadFileVo.getContext(), headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/download/batch", method = RequestMethod.GET)
+    public ResponseEntity<Object> downloadList(Long[] ids) {
+        HttpHeaders headers = new HttpHeaders();
+        DownLoadFileVo downLoadFileVo = fileService.downLoadFiles(ids);
         try {
             headers.setContentDispositionFormData("attachment", new String(downLoadFileVo.getFileName().getBytes("UTF-8"), "ISO8859-1"));
         } catch (Exception e) {
@@ -45,11 +55,7 @@ public class FileController extends BaseController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public ResponseEntity<Object> upload(String uuid, @RequestParam("file") MultipartFile mfile) {
-        Boolean checkUser = userService.checkUser(uuid);
-        if (!checkUser) {
-            return ResponseEntity.ok(BaseVo.getErrorVo(500, "请先登录"));
-        }
+    public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile mfile) {
         byte arr[] = null;
         if (mfile != null) {
             try {
@@ -58,7 +64,12 @@ public class FileController extends BaseController {
                 e.printStackTrace();
             }
         }
-        return ResponseEntity.ok(fileService.saveFile(uuid, arr, mfile.getOriginalFilename()));
+        return ResponseEntity.ok(fileService.saveFile(arr, mfile.getOriginalFilename()));
+    }
+
+    @RequestMapping(value = "/remove/batch", method = RequestMethod.DELETE)
+    public ResponseEntity<Object> remove(Long[] ids, String uuid) {
+        return ResponseEntity.ok(fileService.remove(ids, uuid));
     }
 
     /**
@@ -68,13 +79,9 @@ public class FileController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/upload/batch", method = RequestMethod.POST)
-    public ResponseEntity<Object> batchUpload(String uuid, HttpServletRequest request) {
-        Boolean checkUser = userService.checkUser(uuid);
-        if (!checkUser) {
-            return ResponseEntity.ok(BaseVo.getErrorVo(500, "请先登录"));
-        }
+    public ResponseEntity<Object> batchUpload(HttpServletRequest request) {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-        return ResponseEntity.ok(fileService.saveFiles(uuid, files));
+        return ResponseEntity.ok(fileService.saveFiles(files));
     }
 
 }

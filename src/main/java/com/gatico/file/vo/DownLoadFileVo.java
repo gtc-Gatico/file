@@ -1,6 +1,6 @@
 package com.gatico.file.vo;
 
-public class DownLoadFileVo {
+public class DownLoadFileVo extends BaseVo{
     private  String fileName;
     private byte[]context;
 

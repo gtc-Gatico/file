@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>小牛要飞-后台管理</title>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
+    <!-- Common plugins -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/simple-line-icons.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/pace.css" rel="stylesheet">
+    <link href="../css/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="../css/nanoscroller.css" rel="stylesheet">
+    <link href="../css/metismenu.min.css" rel="stylesheet">
+    <link href="../css/c3.min.css" rel="stylesheet">
+    <link href="../css/blue.css" rel="stylesheet">
+    <!-- dataTables -->
+    <link href="../css/jquery.datatables.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/jquery.toast.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <!--template css-->
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/sweet-alert.css" rel="stylesheet">
+    <link href="../css/style_1.css" rel="stylesheet" type="text/css"/>
+    <link href="../css/main.css" rel="stylesheet">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/js-cookie.js"></script>
+    <script src="../js/jquery.md5.js"></script>
+    <script src="../js/layer/layer.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/pace.min.js"></script>
+    <script src="../js/jasny-bootstrap.min.js"></script>
+    <script src="../js/jquery.slimscroll.min.js"></script>
+    <script src="../js/jquery.nanoscroller.min.js"></script>
+    <script src="../js/metismenu.min.js"></script>
+    <script src="../js/index.js"></script>
+    <!--page script-->
+    <script src="../js/d3.min.js"></script>
+    <script src="../js/c3.min.js"></script>
+    <!-- iCheck for radio and checkboxes -->
+    <script src="../js/icheck.min.js"></script>
+    <!-- Datatables-->
+    <script src="../js/jquery.datatables.min.js"></script>
+    <script src="../js/datatables.responsive.min.js"></script>
+    <script src="../js/jquery.toast.min.js"></script>
+    <script src="../js/dashboard-alpha.js"></script>
+    <script src="../js/sweet-alert.min.js"></script>
+    <script src="../js/jstree.min.js"></script>
+    <script src="../js/moment-with-locales.js"></script>
+    <script src="../js/bootstrap-datetimepicker.min.js"></script>
+    <!--    <script src="../js/bootstrap-datetimepicker.zh-CN.js"></script>-->
+    <script src="../js/main.js"></script>
+    <script src="../js/common.js"></script>
+
+</head>
+<!--top bar start-->
+<div class="top-bar light-top-bar"><!--by default top bar is dark, add .light-top-bar class to make it light-->
+    <div class="container-fluid">
+        <div class="row" style="height: 65px;">
+            <div class="col-xs-6">
+                <a href="../index.html" class="admin-logo">
+                    <h1><img src="../images/index/logo.png" alt=""></h1>
+                </a>
+                <div class="left-nav-toggle visible-xs visible-sm">
+                    <a href="">
+                        <i class="glyphicon glyphicon-menu-hamburger"></i>
+                    </a>
+                </div><!--end nav toggle icon-->
+                <!--start search form-->
+                <!--<div class="search-form hidden-xs">
+                    <form>
+                        <input type="text" class="form-control" placeholder="搜索文件...">
+                        <button type="button" class="btn-search"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>-->
+                <!--end search form-->
+            </div>
+            <div class="col-xs-6">
+                <ul class="list-inline top-right-nav">
+                    <li class="dropdown hidden-xs icon-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-envelope"></i>
+                            <span class="badge badge-warning">4</span>
+                        </a>
+                        <ul class="dropdown-menu top-dropdown lg-dropdown notification-dropdown">
+                            <li>
+                                <div class="dropdown-header"><a href="#" class="pull-right text-muted"><small>View All</small></a> Messages</div>
+                                <div class="scrollDiv">
+
+                                    <div class="notification-list">
+                                        <a href="javascript: void(0);" class="clearfix">
+                                                    <span class="notification-icon">
+                                                        <img src="../picture/avtar-2.jpg" alt="" class="img-circle" width="50">
+                                                    </span>
+                                            <span class="notification-title">John Doe <label class="label label-primary pull-right">Office</label></span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                        <a href="javascript: void(0);" class="clearfix">
+                                                    <span class="notification-icon">
+                                                        <img src="../picture/avtar-3.jpg" alt="" class="img-circle" width="50">
+                                                    </span>
+                                            <span class="notification-title">Emily Doe  <label class="label label-info pull-right">Marketing</label></span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                        <a href="javascript: void(0);" class="clearfix">
+                                                    <span class="notification-icon">
+                                                        <img src="../picture/avtar-4.jpg" alt="" class="img-circle" width="50">
+                                                    </span>
+                                            <span class="notification-title">Michael Clark <label class="label label-warning pull-right">Support</label> </span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                        <a href="javascript: void(0);" class="clearfix">
+                                                    <span class="notification-icon">
+                                                        <img src="../picture/avtar-5.jpg" alt="" class="img-circle" width="50">
+                                                    </span>
+                                            <span class="notification-title">Ronaldo <label class="label label-success pull-right">Metting</label> </span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown hidden-xs icon-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="glyphicon glyphicon-bell"></i>
+                            <span class="badge badge-danger">6</span>
+                        </a>
+                        <ul class="dropdown-menu top-dropdown lg-dropdown notification-dropdown">
+                            <li>
+                                <div class="dropdown-header"><a href="#" class="pull-right text-muted"><small>View All</small></a> Notifications</div>
+                                <div class="scrollDiv">
+                                    <div class="notification-list">
+                                        <a href="javascript: void(0);" class="clearfix">
+                                            <span class="notification-icon"><i class="icon-cloud-upload text-primary"></i></span>
+                                            <span class="notification-title">Upload Complete</span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                        <a href="javascript: void(0);" class="clearfix">
+                                            <span class="notification-icon"><i class="icon-info text-warning"></i></span>
+                                            <span class="notification-title">Storage Space low</span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                        <a href="javascript: void(0);" class="clearfix">
+                                            <span class="notification-icon"><i class="icon-check text-success"></i></span>
+                                            <span class="notification-title">Project Task Complete </span>
+                                            <span class="notification-description">Praesent dictum nisl non est sagittis luctus.</span>
+                                            <span class="notification-time">40 minutes ago</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="javascript: void(0);" class="right-sidebar-toggle"><i class="glyphicon glyphicon-align-right"></i></a>
+                    </li>
+                    <li class="dropdown avtar-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="../picture/avtar-1.jpg" class="img-circle" width="30" alt="">
+
+                        </a>
+                        <ul class="dropdown-menu top-dropdown">
+                            <li><a href="javascript: void(0);"><i class="icon-bell"></i> Activities</a></li>
+                            <li><a href="javascript: void(0);"><i class="icon-user"></i> Profile</a></li>
+                            <li><a href="javascript: void(0);"><i class="icon-settings"></i> Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a href="javascript: void(0);" onclick="logout()"><i class="icon-logout"></i> Logout</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- top bar end-->
+
+<!--right side bar panel-->
+<nav id="right-sidebar-toggle" class="right_sidebar">
+    <div class="nano">
+        <div class="nano-content">
+            <div>
+                <!-- Nav tabs -->
+                <ul class="list-inline nav-tab-panel clearfix" role="tablist">
+                    <li role="presentation" class="active"><a href="#projects" aria-controls="projects" role="tab" data-toggle="tab">Projects</a></li>
+                    <li role="presentation"><a href="#contacts" aria-controls="contacts" role="tab" data-toggle="tab">Contacts</a></li>
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="projects">
+                        <ul class="sidebar-list">
+                            <li class="sidebar-title">
+                                <h3 class="font-100"> Current projects</h3>
+                                <small>There are <strong>7</strong> Current project</small>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label label-primary pull-right">New</span>
+                                    <h4>YII with material design</h4>
+                                    <p>
+                                        It is a long established fact that a reader will be distracted.
+                                    </p>
+
+                                    <div class="small">Completion with: 42%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 42%;" class="progress-bar progress-bar-warning"></div>
+                                    </div>
+                                    <div class="small text-danger">Deadline - September 15, 2016</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label label-primary pull-right">New</span>
+                                    <h4>HTML to AngularJs</h4>
+                                    <p>
+                                        It is a long established fact that a reader will be distracted.
+                                    </p>
+
+                                    <div class="small">Completion with: 12%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 12%;" class="progress-bar progress-bar-danger"></div>
+                                    </div>
+                                    <div class="small text-danger">Deadline - September 15, 2016</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label label-success pull-right">Company</span>
+                                    <h4>Website Re-design</h4>
+                                    <p>
+                                        It is a long established fact that a reader will be distracted.
+                                    </p>
+
+                                    <div class="small">Completion with: 84%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 84%;" class="progress-bar progress-bar-success"></div>
+                                    </div>
+                                    <div class="small text-danger">Deadline - September 15, 2016</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label label-success pull-right">Metting</span>
+                                    <h4>Business Consultancy</h4>
+                                    <p>
+                                        It is a long established fact that a reader will be distracted.
+                                    </p>
+
+                                    <div class="small">Completion with: 54%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 54%;" class="progress-bar progress-bar-info"></div>
+                                    </div>
+                                    <div class="small text-danger">Deadline - September 15, 2016</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label label-primary pull-right">New</span>
+                                    <h4>YII with material design</h4>
+                                    <p>
+                                        It is a long established fact that a reader will be distracted.
+                                    </p>
+
+                                    <div class="small">Completion with: 42%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 42%;" class="progress-bar progress-bar-warning"></div>
+                                    </div>
+                                    <div class="small text-danger">Deadline - September 15, 2016</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label label-primary pull-right">New</span>
+                                    <h4>HTML to AngularJs</h4>
+                                    <p>
+                                        It is a long established fact that a reader will be distracted.
+                                    </p>
+
+                                    <div class="small">Completion with: 12%</div>
+                                    <div class="progress progress-mini">
+                                        <div style="width: 12%;" class="progress-bar progress-bar-danger"></div>
+                                    </div>
+                                    <div class="small text-danger">Deadline - September 15, 2016</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="contacts">
+
+                        <ul class="list-unstyled sidebar-contact-list">
+                            <li class="clearfix">
+                                <a href="#" class="media-box">
+                                            <span class="pull-right">
+                                                <span class="circle circle-success circle-lg"></span>
+                                            </span>
+                                    <span class="pull-left">
+                                                <!-- Contact avatar-->
+                                                <img src="../picture/avtar-1.jpg" alt="user" class="media-box-object img-circle" width="50">
+                                            </span>
+                                    <!-- Contact info-->
+                                    <span class="media-box-body">
+                                                <span class="media-box-heading">
+                                                    <strong>Angelina</strong>
+                                                    <br>
+                                                    <small class="text-muted">Designer</small>
+                                                </span>
+                                            </span>
+                                </a>
+                            </li><!--li end-->
+                            <li class="clearfix">
+                                <a href="#" class="media-box">
+                                            <span class="pull-right">
+                                                <span class="circle circle-success circle-lg"></span>
+                                            </span>
+                                    <span class="pull-left">
+                                                <!-- Contact avatar-->
+                                                <img src="../picture/avtar-2.jpg" alt="user" class="media-box-object img-circle" width="50">
+                                            </span>
+                                    <!-- Contact info-->
+                                    <span class="media-box-body">
+                                                <span class="media-box-heading">
+                                                    <strong>John doe</strong>
+                                                    <br>
+                                                    <small class="text-muted">Designer</small>
+                                                </span>
+                                            </span>
+                                </a>
+                            </li><!--li end-->
+                            <li class="clearfix">
+                                <a href="#" class="media-box">
+                                            <span class="pull-right">
+                                                <span class="circle circle-danger circle-lg"></span>
+                                            </span>
+                                    <span class="pull-left">
+                                                <!-- Contact avatar-->
+                                                <img src="../picture/avtar-3.jpg" alt="user" class="media-box-object img-circle" width="50">
+                                            </span>
+                                    <!-- Contact info-->
+                                    <span class="media-box-body">
+                                                <span class="media-box-heading">
+                                                    <strong>Eluga Smith</strong>
+                                                    <br>
+                                                    <small class="text-muted">Designer</small>
+                                                </span>
+                                            </span>
+                                </a>
+                            </li><!--li end-->
+                            <li class="clearfix">
+                                <a href="#" class="media-box">
+                                            <span class="pull-right">
+                                                <span class="circle circle-lg"></span>
+                                            </span>
+                                    <span class="pull-left">
+                                                <!-- Contact avatar-->
+                                                <img src="../picture/avtar-4.jpg" alt="user" class="media-box-object img-circle" width="50">
+                                            </span>
+                                    <!-- Contact info-->
+                                    <span class="media-box-body">
+                                                <span class="media-box-heading">
+                                                    <strong>Jonathan Doe</strong>
+                                                    <br>
+                                                    <small class="text-muted">Designer</small>
+                                                </span>
+                                            </span>
+                                </a>
+                            </li><!--li end-->
+                            <li class="clearfix">
+                                <a href="#" class="media-box">
+                                            <span class="pull-right">
+                                                <span class="circle circle-success circle-lg"></span>
+                                            </span>
+                                    <span class="pull-left">
+                                                <!-- Contact avatar-->
+                                                <img src="../picture/avtar-5.jpg" alt="user" class="media-box-object img-circle" width="50">
+                                            </span>
+                                    <!-- Contact info-->
+                                    <span class="media-box-body">
+                                                <span class="media-box-heading">
+                                                    <strong>Angelina</strong>
+                                                    <br>
+                                                    <small class="text-muted">Designer</small>
+                                                </span>
+                                            </span>
+                                </a>
+                            </li><!--li end-->
+                            <li>
+                                <div class=" text-center">
+                                    <!-- Optional link to list more users-->
+                                    <a href="javascript:void(0);" title="See more contacts" class="btn btn-teal">
+                                        Load more..
+                                    </a>
+                                </div>
+                            </li>
+                        </ul><!--end sidebar contacts-list-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
+<!--end right side bar panel-->
+
+
+<!--left navigation start-->
+<aside class="float-navigation light-navigation">
+    <div class="nano">
+        <div class="nano-content">
+            <ul class="metisMenu nav" id="menu">
+                <li>
+                    <a href="javascript: void(0);" aria-expanded="true"><i class="icon-home"></i> 用户管理 <span class="fa arrow"></span></a>
+                    <ul class="nav-second-level nav" aria-expanded="true">
+                        <li><a href="../index.html">管理员账户</a></li>
+                        <li><a href="index-beta.html">普通用户</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" aria-expanded="true"><i class="icon-handbag"></i>用户页面管理<span class="fa arrow"></span></a>
+                    <ul class="nav-second-level nav" aria-expanded="true">
+                        <li><a href="ecommerce-dashboard.html">登录页</a></li>
+                        <li><a href="ecommerce-products.html">主页</a></li>
+                        <li><a href="ecommerce-orders.html">仪表盘页</a></li>
+                    </ul>
+                </li>
+                <li><a href="widgets.html"><i class="fa fa-diamond"></i> 用户菜单管理</a></li>
+                <li>
+                    <a href="javascript: void(0);" aria-expanded="true"><i class="icon-settings"></i> 系统管理 <span class="fa arrow"></span></a>
+                    <ul class="nav-second-level nav" aria-expanded="false">
+                        <li><a href="ui-typography.html"></a></li>
+                        <li><a href="ui-icons.html">Icons</a></li>
+                        <li><a href="ui-panels.html">Panels</a></li>
+                        <li><a href="ui-buttons.html">Buttons</a></li>
+                        <li><a href="ui-tabs.html">tabs</a></li>
+                        <li><a href="ui-tip-pop.html">Tooltip & Popovers</a></li>
+                        <li><a href="ui-alerts.html">Alerts</a></li>
+                        <li><a href="ui-modals.html">modals</a></li>
+                        <li><a href="ui-grid.html">grid system</a></li>
+                        <li><a href="ui-carousel.html">Carousel</a></li>
+                        <li><a href="ui-sweetalerts.html">Sweet alters</a></li>
+                        <li><a href="ui-alertify.html">Alertify Alters</a></li>
+                        <li><a href="ui-sliders.html">Sliders</a></li>
+                        <li><a href="ui-nestable.html">Nestable</a></li>
+                        <li><a href="ui-date-time-picker.html">Date time pickers</a></li>
+                        <li><a href="ui-treeview.html">Tree view</a></li>
+                        <li><a href="ui-draggable-panels.html">Draggable Panels</a></li>
+                    </ul>
+                </li>
+                <!-- <li>
+                     <a href="javascript: void(0);" aria-expanded="true"><i class="icon-folder-alt"></i> Nested menu <span class="fa arrow"></span></a>
+                     <ul class="nav-second-level nav" aria-expanded="true">
+                         <li><a href="javascript: void(0);">Level 1</a></li>
+                         <li><a href="javascript: void(0);" aria-expanded="true">Level 2 <span class="fa arrow"></span></a>
+                             <ul class="nav-third-level nav" aria-expanded="true">
+                                 <li><a href="javascript: void(0);">Level 2</a></li>
+                                 <li><a href="javascript: void(0);">Level 2</a></li>
+                             </ul>
+                         </li>
+                     </ul>
+                 </li>-->
+                <!--<li><a href="landing/index.html" target="_blank" class="bg-primary"><i class="icon-star"></i>Landing page</a></li>-->
+            </ul>
+        </div><!--nano content-->
+    </div><!--nano scroll end-->
+</aside>
+<!--left navigation end-->
+
+
+<!--main content start-->
+<section class="main-content">
+
+
+    <!--page header start-->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12 ">
+                <ol class="breadcrumb">
+                    <li><a href="javascript: void(0);"><i class="fa fa-home"></i></a></li>
+                    <li>tables</li>
+                    <li>data tables</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!--page header end-->
+
+    <!--start page content-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default collapsed">
+                <div class="panel-heading">文件管理
+                    <div class="pull-right">
+                        <a class="btn btn-primary btn-xs btn-border btn-rounded" onclick="Modal_Dialog('<%=basePath%>znfac/confg/front/znfacconfg_prodbse01.jsp','500','1100')" data-target=".bs-example-modal-default">登记 </a>
+                        <a class="btn btn-warning btn-xs btn-border btn-rounded" onclick="edit('<%=basePath%>znfac/confg/front/znfacconfg_prodbse02.jsp','prodcode','500','1100')" data-target=".bs-example-modal-default">修改</a>
+                        <a class="btn btn-danger btn-xs btn-border btn-rounded" id="delete" onclick="del('znfacconfg_prodbse03','prodcode')">删除</a>
+                    </div>
+                </div>
+                <div class="panel-body main-body">
+                    <div class="fixed-table">
+                        <div class="tbscrollbar">
+                            <table id="datatable">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--end row-->
+
+    <!--end page content-->
+
+
+    <!--Start footer-->
+    <footer class="footer text-center">
+        <span>Copyright &copy; <font id="year">2015</font>. Gatico</span>
+    </footer>
+    <!--end footer-->
+
+</section>
+<!--end main content-->
+
+<script>
+    function download(id) {
+        window.location.href = "/file/download/" + id;
+    }
+
+    $(function () {
+        $("#year").html(new Date().format("yyyy"));
+        var username = $.cookie("username");
+        $("#userName").text(username);
+        loadData("file");
+    });
+
+    function loadData(type) {
+        layer.close(layer.index);
+        layer.load(0, {shade: [0.2, '#000']});
+        $("#datatable").Table({
+            data: {
+                url: "/file/files/?type=" + type,
+                pageIndex: "1",
+                pageSize: "10",
+                page: true,
+            },
+            search: false,
+            columns: [
+                {name: "id", sort: "false", type: "text", width: 10, label: "编号"},
+                {name: "name", sort: "false", type: "text", width: 250, label: "文件名"},
+                {
+                    name: "type", sort: "false", type: "select", width: 200, label: "类型", option: {
+                        displayName: "name",
+                        valueName: "value",
+                        data: [
+                            {name: "file", value: "文件"},
+                            {name: "file", value: "文件"},
+                            {name: "file", value: "文件"}
+                        ]
+                    }
+                },
+                {
+                    name: "length", sort: "false", type: "text", width: 220, label: "长度", template: function (dataItem) {
+                        return throughputDisplay(dataItem.length);
+                    },
+                },
+                {name: "id", sort: "false", type: "link", width: 220, label: "操作", url: "<a href='javascript:download({id});'>下载</a>"},
+            ],
+            multipleSelect: true,
+            onload: function () {
+                layer.close(layer.index);
+                console.log('ok');
+            }
+        });
+        //layer.close(layer.index);
+        /*$.get("/file/files/" + uuid + "?type=" + type, function (res) {
+            if (res.code == 0) {
+                var files = res.data.files;
+                if (files != null && files.length > 0) {
+                    layui.use('table', function () {
+                        var table = layui.table;
+
+                        table.render({
+                            elem: '#tab',
+                            data: files,
+                            even: true,
+                            //url:"/user/userFiles/" + uuid + "?type=" + type,
+                            cols: [[
+                                {type: 'checkbox'},
+                                {field: 'name', title: '名称', sort: true},
+                                {
+                                    field: 'length', title: '大小', sort: true, templet: function (data) {
+                                        return throughputDisplay(data.length)
+                                    }
+                                },
+                                {field: 'type', title: '类型'},
+                                {field: 'time', title: '上传时间', sort: true, dataType: "datetime"},
+                                {
+                                    field: 'id', title: '操作', templet: function (data) {
+                                        return "<div><a href='javascript:download(" + data.id + ")'>下载</a></div>"
+                                    }
+                                },
+                            ]],
+                            page: {
+                                theme: "#836b49",
+                                limit: 15
+                            },
+                        });
+                    });
+
+                    /!* $("#tab").find("tbody").empty();
+                     var html = "";
+                     for (var i = 0; i < files.length; i++) {
+                         var file = files[i];
+                         //id: 3, length: 2456929, name: "4d76fda03be595dc02f6e53e93e8219f.jpg", time: 1564212437000, type: "jpg"
+                         html += "<tr><td><input type='checkbox' name='itemCheck'/></td><td>" + file.name + "</td><td>" + throughputDisplay(file.length) + "</td><td>" + file.type + "</td><td>" + new Date(file.time).Format("yyyy-MM-dd HH:mm:ss") + "</td><td><a href='javascript:download(" + file.id + ")'>下载</a></td></tr>";
+                     }
+                     $("#tab").find("tbody").append(html);*!/
+                    layer.close(layer.index);
+                } else {
+                    layer.close(layer.index);
+                    layer.msg("暂无数据");
+                    $("#fileDiv").append("暂无文件");
+                    $("#fileCount").text("上传文件个数：0");
+                }
+            } else if (res.code == 500) {
+                window.location.href = "../index.html";
+            }
+        });*/
+    }
+
+    function upload() {
+        layer.open({
+            type: 1,
+            title: false,
+            //skin: 'layui-bg-blue', //加上边框
+            area: ['398px', '220px'], //宽高
+            content: '<div class="layui-upload-drag" id="upload" style="width:80%;">' +
+                '  <i class="layui-icon" style="color:#836b49 "></i>\n' +
+                '  <p>点击，或将文件拖拽到此处</p>\n' +
+                '  <div class="layui-hide" id="uploadDemoView">\n' +
+                '    <hr>\n' +
+                '    <img src="" alt="上传成功后渲染" style="max-width: 196px">\n' +
+                '  </div>\n' +
+                '</div>' +
+                '<div align="center"><button id="submitUpload" class="layui-btn layui-btn-normal" style="width:200px"><i class="layui-icon">&#xe67c;</i>上传</button></div>'
+        });
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#upload', //绑定元素
+                multiple: true,
+                auto: false,
+                drag: true,
+                accept: "file",
+                bindAction: "#submitUpload",
+                url: "/file/upload/batch?uuid=" + $.cookie("uuid"), //上传接口
+                progress: function (n, elem) {
+                    //var percent = n + '%' //获取进度百分比
+                    progress("progress", n); //可配合 layui 进度条元素使用
+                    //以下系 layui 2.5.6 新增
+                    //console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+                },
+                done: function (res) {
+                    //上传完毕回调
+                    if (res.code == 0) {
+                        layer.close(layer.index);
+                        layer.msg("上传成功");
+                        loadData("file");
+                    }
+                },
+                error: function () {
+                    //请求异常回调
+                    layer.msg("上传失败，请重试");
+                }
+            });
+        });
+
+    }
+
+    function downloadBatch() {
+        if ($.cookie("uuid")) {
+            var ids = [];
+            layui.table.cache['tab'].forEach(function (v, i) {
+                if (v.LAY_CHECKED) {
+                    ids.push("ids=" + v.id);
+                }
+            });
+            if (ids.length <= 0) {
+                layer.msg("请选择要下载的文件");
+                return;
+            }
+            window.location.href = "/file/download/batch?uuid=" + $.cookie("uuid") + "&" + ids.join("&");
+        } else {
+            layer.msg("请先登录");
+            window.location.href = "../index.html";
+        }
+    }
+
+    function remove() {
+        if ($.cookie("uuid")) {
+            layer.confirm("确定要删除所选的文件吗？",
+                {
+                    btn: ['确定', "取消"],
+                    title: false,
+                    yes: function (index, layero) {
+                        var ids = [];
+                        layui.table.cache['tab'].forEach(function (v, i) {
+                            if (v.LAY_CHECKED) {
+                                ids.push("ids=" + v.id);
+                            }
+                        });
+                        $.delete("/file/remove/batch?uuid=" + $.cookie("uuid") + "&" + ids.join("&"), null, function (res) {
+                            if (res.code == 0) {
+                                layer.msg("删除成功");
+                                loadData("file");
+                            } else {
+                                layer.msg(res.msg);
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        return false;
+                    }
+                }
+            );
+        } else {
+            layer.msg("请先登录");
+            window.location.href = "../index.html";
+        }
+    }
+
+</script>
+</body>
+</html>

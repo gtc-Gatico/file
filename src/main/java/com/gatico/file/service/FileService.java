@@ -1,30 +1,45 @@
 package com.gatico.file.service;
 
+import com.gatico.file.bean.FileBean;
 import com.gatico.file.dao.FileDao;
 import com.gatico.file.dao.FileOperationDao;
 import com.gatico.file.entity.FileEntity;
 import com.gatico.file.entity.FileOperationEntity;
 import com.gatico.file.entity.UserEntity;
 import com.gatico.file.enums.FileOperationType;
+import com.gatico.file.interceptor.UserInterceptor;
 import com.gatico.file.vo.BaseVo;
 import com.gatico.file.vo.DownLoadFileVo;
 import com.gatico.file.vo.FileVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.io.*;
 import java.sql.Timestamp;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class FileService {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Value("${file.path}")
     private String localPath;
@@ -38,10 +53,25 @@ public class FileService {
     @Autowired
     private UserService userService;
 
-    public BaseVo getUserFile(String uuid, String type) {
-        UserEntity userEntity = userService.getUserByUuid(uuid);
+    @Autowired
+    private UserInterceptor userInterceptor;
+
+    public BaseVo getUserFile(FileBean fileBean, Integer pageIndex, Integer pageSize) {
+        UserEntity userEntity = userInterceptor.getCurrentUser();
         BaseVo successVo = BaseVo.getSuccessVo();
-        List<FileEntity> fileEntityList = fileDao.findAllByUserIdAndType(userEntity.getId(), type);
+        Specification<FileEntity> spec = new Specification<FileEntity>() {
+            @Override
+            public Predicate toPredicate(Root<FileEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>(); //所有的断言
+                if (fileBean.getType() != null && !fileBean.getType().equals("")) { //添加断言
+                    Predicate type = criteriaBuilder.like(root.get("type").as(String.class), fileBean.getType() + "%");
+                    predicates.add(type);
+                }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            }
+        };
+        Pageable pageable = new PageRequest(pageIndex - 1, pageSize);
+        Page<FileEntity> fileEntityList = fileDao.findAll(spec, pageable);
         List<FileVo> fileVos = new LinkedList<>();
         fileEntityList.forEach(fileEntity -> {
             fileVos.add(new FileVo(
@@ -53,12 +83,14 @@ public class FileService {
                     fileEntity.getType()
             ));
         });
-        successVo.setData("files", fileVos);
+        successVo.setData(fileVos);
+        successVo.setTotal(fileDao.countAllByUserIdAndRemovedFalse(userEntity.getId()));
         return successVo;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public DownLoadFileVo downLoadFile(Long fileId, String uuid) {
+    public DownLoadFileVo downLoadFile(Long fileId) {
+        UserEntity userEntity = userInterceptor.getCurrentUser();
         DownLoadFileVo downLoadFileVo = new DownLoadFileVo();
         Optional<FileEntity> fileList = fileDao.findById(fileId);
         FileEntity fileEntity = fileList.get();
@@ -66,12 +98,52 @@ public class FileService {
         downLoadFileVo.setContext(getFile(fileEntity.getPath()));
         FileOperationEntity fileOperationEntity = new FileOperationEntity();
         fileOperationEntity.setFileId(fileList.get().getId());
-        fileOperationEntity.setUserId(userService.getUserByUuid(uuid).getId());
+        fileOperationEntity.setUserId(userEntity.getId());
         fileOperationEntity.setTime(new Timestamp(System.currentTimeMillis()));
         fileOperationEntity.setType(FileOperationType.DOWNLOAD.getCode());
         fileOperationDao.saveAndFlush(fileOperationEntity);
         return downLoadFileVo;
     }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public DownLoadFileVo downLoadFiles(Long[] fileIds) {
+        UserEntity userEntity = userInterceptor.getCurrentUser();
+        DownLoadFileVo downLoadFileVo = new DownLoadFileVo();
+        ZipOutputStream zipOutputStream = null;
+        try {
+            String folder = localPath + "/" + userEntity.getUid() + "/";
+            String fileName = new SimpleDateFormat("yyyy-MM-dd_hh_mm:ss").format(new Date()) + ".zip";
+            String path = folder + fileName;
+            File tmpZip = new File(path);
+            zipOutputStream = new ZipOutputStream(new FileOutputStream(tmpZip));
+            for (int i = 0; i < fileIds.length; i++) {
+                Optional<FileEntity> fileList = fileDao.findById(fileIds[i]);
+                FileEntity fileEntity = fileList.get();
+                zipOutputStream.putNextEntry(new ZipEntry(fileEntity.getName()));
+                zipOutputStream.write(getFile(fileEntity.getPath()));
+                FileOperationEntity fileOperationEntity = new FileOperationEntity();
+                fileOperationEntity.setFileId(fileList.get().getId());
+                fileOperationEntity.setUserId(userEntity.getId());
+                fileOperationEntity.setTime(new Timestamp(System.currentTimeMillis()));
+                fileOperationEntity.setType(FileOperationType.DOWNLOAD.getCode());
+                fileOperationDao.saveAndFlush(fileOperationEntity);
+            }
+            zipOutputStream.finish();
+            zipOutputStream.close();
+            downLoadFileVo.setFileName(fileName);
+            downLoadFileVo.setContext(getFile(path));
+            tmpZip.delete();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            downLoadFileVo = (DownLoadFileVo) BaseVo.getErrorVo(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            downLoadFileVo = (DownLoadFileVo) BaseVo.getErrorVo(e.getMessage());
+        }
+
+        return downLoadFileVo;
+    }
+
 
     public FileEntity getFileById(Long fileId) {
         Optional<FileEntity> fileList = fileDao.findById(fileId);
@@ -97,8 +169,8 @@ public class FileService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public BaseVo saveFile(String uuid, byte arr[], String fileName) {
-        UserEntity userEntity = userService.getUserByUuid(uuid);
+    public BaseVo saveFile(byte arr[], String fileName) {
+        UserEntity userEntity = userInterceptor.getCurrentUser();
         String folder = localPath + "/" + userEntity.getUid() + "/";
         String path = folder + fileName;
         File foldFile = new File(folder);
@@ -134,13 +206,29 @@ public class FileService {
                         || type.toLowerCase().contains("wma")
         ) {
             type = "sound";
+        /*}else if (
+                type.toLowerCase().contains("zip")
+                        || type.toLowerCase().contains("tar.gz")
+                        || type.toLowerCase().contains("7z")
+                        || type.toLowerCase().contains("tar")
+                        || type.toLowerCase().contains("win")
+                        || type.toLowerCase().contains("gzip")
+        ) {
+            type = "zip";*/
         } else {
             type = "file";
         }
         fileEntity.setType(type);
         fileEntity.setPath(path);
+        fileEntity.setRemoved(false);
         fileEntity.setTime(new Timestamp(System.currentTimeMillis()));
         fileDao.saveAndFlush(fileEntity);
+        FileOperationEntity fileOperationEntity = new FileOperationEntity();
+        fileOperationEntity.setFileId(fileEntity.getId());
+        fileOperationEntity.setUserId(userEntity.getId());
+        fileOperationEntity.setTime(new Timestamp(System.currentTimeMillis()));
+        fileOperationEntity.setType(FileOperationType.UPLOAD.getCode());
+        fileOperationDao.saveAndFlush(fileOperationEntity);
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(path);
             fileOutputStream.write(arr);
@@ -154,18 +242,40 @@ public class FileService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public BaseVo saveFiles(String uuid, List<MultipartFile> files) {
+    public BaseVo saveFiles(List<MultipartFile> files) {
         MultipartFile file = null;
         for (int i = 0; i < files.size(); ++i) {
             file = files.get(i);
             if (!file.isEmpty()) {
                 try {
                     byte arr[] = file.getBytes();
-                    saveFile(uuid, arr, file.getOriginalFilename());
+                    saveFile(arr, file.getOriginalFilename());
                 } catch (IOException e) {
                     return BaseVo.getErrorVo(e.getMessage());
                 }
             }
+        }
+        return BaseVo.getSuccessVo();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public BaseVo remove(Long[] ids, String uuid) {
+        Boolean checkUser = userService.checkUser(uuid);
+        if (!checkUser) {
+            return BaseVo.getErrorVo(500, "请先登录");
+        }
+        UserEntity userEntity = (UserEntity) redisTemplate.opsForValue().get(uuid);
+        for (int i = 0; i < ids.length; i++) {
+            Optional<FileEntity> fileList = fileDao.findById(ids[i]);
+            FileEntity fileEntity = fileList.get();
+            fileEntity.setRemoved(true);
+            fileDao.saveAndFlush(fileEntity);
+            FileOperationEntity fileOperationEntity = new FileOperationEntity();
+            fileOperationEntity.setFileId(fileEntity.getId());
+            fileOperationEntity.setUserId(userEntity.getId());
+            fileOperationEntity.setTime(new Timestamp(System.currentTimeMillis()));
+            fileOperationEntity.setType(FileOperationType.REMOVE.getCode());
+            fileOperationDao.saveAndFlush(fileOperationEntity);
         }
         return BaseVo.getSuccessVo();
     }

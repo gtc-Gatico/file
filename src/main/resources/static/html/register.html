@@ -1,35 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>注册</title>
-    <script src="../js/jquery-1.8.3.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>文件助手-注册</title>
+
+    <!-- Common plugins -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/simple-line-icons.css" rel="stylesheet">
+    <!--    <link href="css/font-awesome.min.css" rel="stylesheet">-->
+    <!--    <link href="css/pace.css" rel="stylesheet">-->
+    <!--    <link href="css/jasny-bootstrap.min.css" rel="stylesheet">-->
+    <!--    <link rel="stylesheet" href="css/nanoscroller.css">-->
+    <!--    <link rel="stylesheet" href="css/metismenu.min.css">-->
+    <!--for checkbox-->
+    <!--    <link href="css/blue.css" rel="stylesheet">-->
+    <!--template css-->
+    <link href="../css/style.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="../js/html5shiv.min.js"></script>
+    <script src="../js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon"/>
+    <script src="../js/jquery.min.js"></script>
     <script src="../js/js-cookie.js"></script>
+    <script src="../js/jquery.md5.js"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/layer/layer.js"></script>
 </head>
+<style type="text/css">
+    html, body {
+        height: 100%;
+    }
+</style>
 <body>
-<div>
-    <label>用户名：</label><input name="userName" type="text"/>
-    <label>密码：</label><input name="userPwd" type="password"/>
-    <button id="register">注册</button>
+<div class="misc-wrapper">
+    <div class="misc-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                    <div class="misc-wrapper text-center">
+                        <img src="../images/index/logo.png" alt="">
+                    </div>
+                    <div class="misc-box">
+                        <p class="text-center text-uppercase pad-v">注册</p>
+                        <form role="form" id="registerForm"  novalidate onsubmit="return false" action="/">
+                            <div class="form-group">
+                                <label class="text-muted" for="userName">用户名</label>
+                                <div class="group-icon">
+                                    <input id="userName" type="text" name="userName" placeholder="用户名" class="form-control" required="true" datatype="string">
+                                    <span class="icon-user text-muted icon-input"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="nickName">昵称</label>
+                                <div class="group-icon">
+                                    <input id="nickName" type="text" name="nickName" placeholder="昵称" class="form-control" required="true" datatype="string">
+                                    <span class="icon-user text-muted icon-input"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="userPwd">密码</label>
+                                <div class="group-icon">
+                                    <input id="userPwd" type="password" name="userPwd" placeholder="密码" class="form-control" required="true" datatype="string-english">
+                                    <span class="icon-lock text-muted icon-input"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="text-muted" for="confirmPwd">确认密码</label>
+                                <div class="group-icon">
+                                    <input id="confirmPwd" type="password" name="confirmPwd" placeholder="确认密码" class="form-control" required="true" datatype="string-english">
+                                    <span class="icon-lock text-muted icon-input"></span>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <!--<div class="pull-left">
+                                   <div class="checkbox">
+                                         <label>
+                                             <input type="checkbox" class="i-checks" name="remember">
+                                             <span>  Remember Me</span></label>
+                                     </div>
+                                </div>
+                                -->
+                                <div>
+                                    <button type="submit" id="register" class="btn btn-block btn-primary">注册</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <!--<p class=" text-center">Need to Signup?</p>-->
+                            <a href="../index.html" class="btn btn-block btn-default">已有账号，登录</a>
+                        </form>
+                    </div>
+                    <div class="text-center misc-footer">
+                        <span>&copy; Copyright 2015 - <font id="year">2017</font>. 小牛要飞<br>Powered by Gatico</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     $(function () {
+        $("#year").html(new Date().format("yyyy"));
+        required();
         $("#register").click(function () {
+            if (!$("#registerForm").required()) {
+                return false;
+            }
             var name = $("input[name='userName']").val();
+            var nickName = $("input[name='nickName']").val();
             var password = $("input[name='userPwd']").val();
+            var confirmPwd = $("input[name='confirmPwd']").val();
+            if (password != "" && confirmPwd != "" && password != confirmPwd) {
+                layer.msg("两次输入的密码不一致")
+                return false;
+            }
             var data = {
                 name: name,
+                nickName: nickName,
                 password: $.md5($.md5(password))
             };
-            $.post("/user/register", data, function (res) {
+            layer.load(0, {shade: [0.2, '#000']});
+            $.post("/user/register", JSON.stringify(data), function (res) {
                 if (res.code == 0) {
-                    $.cookie("username", res.data.nickname);
+                    $.cookie("username", res.data.nickName);
                     $.cookie("uuid", res.data.uuid);
-                    alert(res.msg);
-                    window.location.href = "index.html";
+                    layer.close(layer.index);
+                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        window.location.href = "index.html";
+                    }, 1000);
                 } else {
-                    alert(res.msg);
+                    layer.close(layer.index);
+                    layer.msg(res.msg);
                 }
             });
         });

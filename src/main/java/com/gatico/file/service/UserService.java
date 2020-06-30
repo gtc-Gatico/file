@@ -6,20 +6,21 @@ import com.gatico.file.utils.MD5Utils;
 import com.gatico.file.vo.BaseVo;
 import com.gatico.file.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UserService {
 
-    private static Map<String, UserEntity> uuidEntityMap = new HashMap<>();//随机uuid 和用户uid对应关系
-    private static Map<String, String> uidUuidMap = new HashMap<>();//用户uid 和 随机uuid对应关系
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Autowired
     private UserDao userDao;
 
@@ -36,12 +37,12 @@ public class UserService {
         } else {
             if (userEntity.getUserPwd().equals(MD5Utils.SHA1(password))) {
                 String uuid = UUID.randomUUID().toString();
-                UserVo userVo = new UserVo(userEntity.getUserName(), userEntity.getNickName(), uuid);
+                UserVo userVo = new UserVo(userEntity.getUserName(), userEntity.getNickName(), uuid, userEntity.getRole());
                 logout(userEntity.getUid());
-                uuidEntityMap.put(uuid, userEntity);
-                uidUuidMap.put(userEntity.getUid(), uuid);
+
+                redisTemplate.opsForValue().set(uuid, userEntity, 30, TimeUnit.MINUTES);
                 baseVo = BaseVo.getSuccessVo("登录成功");
-                baseVo.setData("user", userVo);
+                baseVo.setData(userVo);
             } else {
                 baseVo.setCode(1);
                 baseVo.setMsg("密码错误");
@@ -51,7 +52,7 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
-    public BaseVo register(String name, String password) {
+    public BaseVo register(String name, String password, String nickName) {
         BaseVo vo = BaseVo.getVo();
         UserEntity userEntity = getUser(name);
         if (null == userEntity) {
@@ -60,12 +61,14 @@ public class UserService {
             userEntity.setUserPwd(MD5Utils.SHA1(password));
             userEntity.setAccount(name);
             userEntity.setUserName(name);
+            userEntity.setNickName(nickName);
+            userEntity.setRole("user");
             userDao.saveAndFlush(userEntity);
             vo.setCode(0);
             vo.setMsg("注册成功");
             String uuid = UUID.randomUUID().toString();
-            uuidEntityMap.put(uuid, userEntity);
-            vo.setData("user", new UserVo(userEntity.getUserName(), userEntity.getNickName(), uuid));
+            redisTemplate.opsForValue().set(uuid, userEntity, 30, TimeUnit.MINUTES);
+            vo.setData(new UserVo(userEntity.getUserName(), userEntity.getNickName(), uuid, userEntity.getRole()));
         } else {
             vo.setCode(BaseVo.SUCCESS_CODE);
             vo.setMsg("注册失败，用户已存在");
@@ -74,27 +77,19 @@ public class UserService {
     }
 
     public Boolean checkUser(String uuid) {
-        UserEntity userEntity = uuidEntityMap.get(uuid);
-        if (userEntity != null) {
+        UserEntity userEntity = (UserEntity) redisTemplate.opsForValue().get(uuid);
+        if (userEntity != null && userEntity.getRole() != null) {
             return true;
         }
         return false;
     }
 
-    public UserEntity getUserByUuid(String uuid) {
-        UserEntity userEntity = uuidEntityMap.get(uuid);
-        if (userEntity != null) {
-            return userEntity;
-        }
-        return null;
-    }
 
     public BaseVo logout(String uuid) {
-        if (uuidEntityMap.get(uuid) != null) {
-            UserEntity userEntity =uuidEntityMap.remove(uuid);
-            uidUuidMap.remove(userEntity.getUid());
-            return BaseVo.getSuccessVo();
+        UserEntity userEntity = (UserEntity) redisTemplate.opsForValue().get(uuid);
+        if (userEntity != null) {
+            redisTemplate.opsForValue().set(uuid, userEntity, 1, TimeUnit.SECONDS);
         }
-        return BaseVo.getErrorVo();
+        return BaseVo.getSuccessVo();
     }
 }

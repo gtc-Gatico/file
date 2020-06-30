@@ -2,7 +2,8 @@ package com.gatico.file.enums;
 
 public enum FileOperationType {
 
-    UPDATE("修改", "update"),
+    UPLOAD("上传", "UPLOAD"),
+    UPDATE("修改", "UPDATE"),
     REMOVE("删除", "REMOVE"),
     DOWNLOAD("下载", "DOWNLOAD"),
 

@@ -1,16 +1,19 @@
 package com.gatico.file.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
-public class UserEntity {
+public class UserEntity implements Serializable {
     private Long id;
     private String uid;
     private String account;
+    private String wechatId;
     private String userName;
     private String userPwd;
     private String nickName;
+    private String role;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +48,16 @@ public class UserEntity {
     }
 
     @Basic
+    @Column(name = "wechat_id")
+    public String getWechatId() {
+        return wechatId;
+    }
+
+    public void setWechatId(String wechatCloudId) {
+        this.wechatId = wechatCloudId;
+    }
+
+    @Basic
     @Column(name = "user_name")
     public String getUserName() {
         return userName;
@@ -72,5 +85,15 @@ public class UserEntity {
 
     public void setNickName(String nickname) {
         this.nickName = nickname;
+    }
+
+    @Basic
+    @Column(name = "role")
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String rule) {
+        this.role = rule;
     }
 }

@@ -74,6 +74,7 @@ public class FileEntity {
     public void setUserId(Long userid) {
         this.userId = userid;
     }
+
     @Basic
     @Column(name = "type")
     public String getType() {
