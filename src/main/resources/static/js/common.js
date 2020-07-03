@@ -1826,7 +1826,7 @@ $.fn.extend({
                                 + '<option value="">请选择</option>' + option + '</select></td>';
                             break;
                         case 'date':
-                            value = '<td ><div class="input-group date" id="datetimepicker' + i + '" name="datetimepicker"><input  style="min-width:' + columns[i].width + 'px;"  id="' + columns[i].name + '" type="text" class="form-control" onchange="search(this,' + table.attr("id") + ')"><span class="input-group-addon" style="width: 100px;height: 34px;"><span class="glyphicon glyphicon-calendar"></span></span></div></td>';
+                            value = '<td ><div class="input-group date" id="datetimepicker' + i + '" name="datetimepicker"><input  style="min-width:' + columns[i].width + 'px;"  id="' + columns[i].name + '" type="text" class="form-control" onchange="search(this,' + table.attr("id") + ')"><span class="input-group-addon" ><span class="glyphicon glyphicon-calendar"></span></span></div></td>';
                             break;
                         case 'hidden':
                             tdval = '';
