@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -56,21 +57,32 @@ public class FileService {
     @Autowired
     private UserInterceptor userInterceptor;
 
-    public BaseVo getUserFile(FileBean fileBean, Integer pageIndex, Integer pageSize) {
+    public BaseVo getUserFile(FileBean fileBean) {
         UserEntity userEntity = userInterceptor.getCurrentUser();
         BaseVo successVo = BaseVo.getSuccessVo();
         Specification<FileEntity> spec = new Specification<FileEntity>() {
             @Override
             public Predicate toPredicate(Root<FileEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new ArrayList<>(); //所有的断言
+                //添加断言
+                Predicate userId = criteriaBuilder.equal(root.get("userId").as(Long.class), userEntity.getId());
+                predicates.add(userId);
+
                 if (fileBean.getType() != null && !fileBean.getType().equals("")) { //添加断言
-                    Predicate type = criteriaBuilder.like(root.get("type").as(String.class), fileBean.getType() + "%");
+                    Predicate type = criteriaBuilder.equal(root.get("type").as(String.class), fileBean.getType());
                     predicates.add(type);
                 }
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+
+                if (fileBean.getName() != null && !fileBean.getName().equals("")) { //添加断言
+                    Predicate name = criteriaBuilder.like(root.get("name").as(String.class), "%" + fileBean.getName() + "%");
+                    predicates.add(name);
+                }
+
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
         };
-        Pageable pageable = new PageRequest(pageIndex - 1, pageSize);
+        Sort sort = new Sort(fileBean.getSortValue(), fileBean.getSortField());
+        Pageable pageable = PageRequest.of(fileBean.getPageIndex() - 1, fileBean.getPageSize(), sort);
         Page<FileEntity> fileEntityList = fileDao.findAll(spec, pageable);
         List<FileVo> fileVos = new LinkedList<>();
         fileEntityList.forEach(fileEntity -> {
@@ -84,7 +96,7 @@ public class FileService {
             ));
         });
         successVo.setData(fileVos);
-        successVo.setTotal(fileDao.countAllByUserIdAndRemovedFalse(userEntity.getId()));
+        successVo.setTotal(fileDao.count(spec));
         return successVo;
     }
 

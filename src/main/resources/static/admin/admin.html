@@ -49,7 +49,7 @@
     <script src="../js/jstree.min.js"></script>
     <script src="../js/moment-with-locales.js"></script>
     <script src="../js/bootstrap-datetimepicker.min.js"></script>
-    <!--    <script src="../js/bootstrap-datetimepicker.zh-CN.js"></script>-->
+<!--    <script src="../js/bootstrap-datetimepicker.zh-CN.js"></script>-->
     <script src="../js/main.js"></script>
     <script src="../js/common.js"></script>
 
@@ -502,10 +502,10 @@
         <div class="col-md-12">
             <div class="panel panel-default collapsed">
                 <div class="panel-heading">文件管理
-                    <div class="pull-right">
-                        <a class="btn btn-primary btn-xs btn-border btn-rounded" onclick="Modal_Dialog('<%=basePath%>znfac/confg/front/znfacconfg_prodbse01.jsp','500','1100')" data-target=".bs-example-modal-default">登记 </a>
-                        <a class="btn btn-warning btn-xs btn-border btn-rounded" onclick="edit('<%=basePath%>znfac/confg/front/znfacconfg_prodbse02.jsp','prodcode','500','1100')" data-target=".bs-example-modal-default">修改</a>
-                        <a class="btn btn-danger btn-xs btn-border btn-rounded" id="delete" onclick="del('znfacconfg_prodbse03','prodcode')">删除</a>
+                    <div class="left col-sm-offset-10">
+                        <a class="btn btn-primary btn btn-border btn-rounded" onclick="" data-target=".bs-example-modal-default">新增</a>
+                        <a class="btn btn-warning btn btn-border btn-rounded" onclick="" data-target=".bs-example-modal-default">修改</a>
+                        <a class="btn btn-danger btn btn-border btn-rounded" onclick="">删除</a>
                     </div>
                 </div>
                 <div class="panel-body main-body">
@@ -549,32 +549,32 @@
         layer.load(0, {shade: [0.2, '#000']});
         $("#datatable").Table({
             data: {
-                url: "/file/files/?type=" + type,
+                url: "/file/files",
                 pageIndex: "1",
                 pageSize: "10",
                 page: true,
             },
-            search: false,
+            search: true,
             columns: [
-                {name: "id", sort: "false", type: "text", width: 10, label: "编号"},
-                {name: "name", sort: "false", type: "text", width: 250, label: "文件名"},
+                {name: "id", sort: "true", type: "hidden", width: 10, label: "编号"},
+                {name: "name", sort: "true", type: "text", width: 250, label: "文件名"},
                 {
-                    name: "type", sort: "false", type: "select", width: 200, label: "类型", option: {
+                    name: "type", sort: "true", type: "select", width: 200, label: "类型", option: {
                         displayName: "name",
                         valueName: "value",
                         data: [
-                            {name: "file", value: "文件"},
-                            {name: "file", value: "文件"},
-                            {name: "file", value: "文件"}
+                            {value: "file",name: "文件"},
+                            {value: "image",name: "图片"},
                         ]
                     }
                 },
                 {
-                    name: "length", sort: "false", type: "text", width: 220, label: "长度", template: function (dataItem) {
+                    name: "length", sort: "true", search: false, type: "text", width: 220, label: "长度", template: function (dataItem) {
                         return throughputDisplay(dataItem.length);
                     },
                 },
-                {name: "id", sort: "false", type: "link", width: 220, label: "操作", url: "<a href='javascript:download({id});'>下载</a>"},
+                {name: "time", sort: "true", type: "date", width: 250, label: "时间"},
+                {name: "id", sort: "true", type: "link", width: 220, label: "操作", url: "<a href='javascript:download({id});'>下载</a>"},
             ],
             multipleSelect: true,
             onload: function () {

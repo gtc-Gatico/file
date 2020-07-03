@@ -2,7 +2,7 @@ package com.gatico.file.bean;
 
 import java.sql.Timestamp;
 
-public class FileBean {
+public class FileBean extends BaseBean{
     private String name;
     private Double length;
     private String path;

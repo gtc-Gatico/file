@@ -24,8 +24,8 @@ public class FileController extends BaseController {
     private FileService fileService;
 
     @RequestMapping(value = "/files", method = RequestMethod.GET)
-    public ResponseEntity<Object> getUserFiles(FileBean fileBean, Integer pageIndex, Integer pageSize) {
-        return ResponseEntity.ok(fileService.getUserFile(fileBean, pageIndex, pageSize));
+    public ResponseEntity<Object> getUserFiles(FileBean fileBean) {
+        return ResponseEntity.ok(fileService.getUserFile(fileBean));
     }
 
     @RequestMapping(value = "/download/{fileId}", method = RequestMethod.GET)

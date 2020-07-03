@@ -41,60 +41,6 @@ $(function () {
     })
 });
 
-var aaa = true;
-var aaa1 = true;
-var sss;
-var ddd;
-var sss1;
-var ddd1;
-var sss2;
-var ddd2;
-var sss3;
-var ddd3;
-
-/**定时器调用事件
- * */
-function myInterval() {
-    if (table != null) {
-        $(table).parent().css("width", $("." + table.attr("id") + "_1").width());
-    }
-    ddd = setTimeout(function () {
-        clearInterval(sss);
-    }, 1000);
-}
-
-/**定时器调用事件
- * */
-function myInterval1() {
-    if (table != null) {
-        $(table).parent().css("width", $("." + table.attr("id") + "_1").width());
-    }
-    ddd1 = setTimeout(function () {
-        clearInterval(sss1);
-    }, 1000);
-}
-
-/**定时器调用事件
- * */
-function myInterval2() {
-    if (table != null) {
-        $(table).parent().css("width", $("." + table.attr("id") + "_1").width());
-    }
-    ddd2 = setTimeout(function () {
-        clearInterval(sss2);
-    }, 1000);
-}
-
-/**定时器调用事件
- * */
-function myInterval3() {
-    if (table != null) {
-        $(table).parent().css("width", $("." + table.attr("id") + "_1").width());
-    }
-    ddd3 = setTimeout(function () {
-        clearInterval(sss3);
-    }, 1000);
-}
 
 function alertMsg(text, flag, title) {
     $.toast({
@@ -335,44 +281,6 @@ function required1() {
 function formatNumber(num) {
     return ("" + num).replace(/(\d{1,3})(?=(\d{3})+(?:$|\.))/g, "$1,");
 }
-
-/**asyncAjax  异步post请求
- * 参数
- * para     json格式参数
- * callback    回调函数
- * */
-function asyncAjax(para, callback, options) {
-    var url = base + "/servlet/mainGateServlet";
-    $.ajax({
-        url: url,
-        data: para,
-        dataType: "json",
-        type: "post",
-        success: function (data) {
-            callback(data, options);
-        }
-    });
-};
-
-/**commonAjax  同步get请求
- * 参数
- *
- * para     json格式参数
- * callback    回调函数
- * options 失败执行
- * */
-function commonAjax(url, para, callback) {
-    $.ajax({
-        url: base + "/servlet/mainGateServlet?" + url,
-        data: para,
-        dataType: "json",
-        type: "get",
-        async: false,
-        success: function (data) {
-            callback(data);
-        }
-    });
-};
 
 /**提示并提交信息
  * 参数
@@ -779,89 +687,6 @@ function save(TRANSCODE, menuid, typecode, tbid) {
     }
 }
 
-/**选择带回
- * 参数
- * TRANSCODE  权限代码
- * menuid 菜单ID
- * typecode  参数名称
- * tbid  table的ID
- *
- */
-function ajaxsave(TRANSCODE, menuid, typecode, tbid) {
-    var url = "?TRANSCODE=" + TRANSCODE + "&JSONFLAG=YES&isjson=true";
-    var type = true;
-    var result = typecode.split(",");
-    var param = {};
-    var endurl = "";
-    $(table).find("input#ck_id").each(function () {
-        if (true == $(this).is(':checked')) {
-            $(this).parent().parent().parent().find("td").each(function () {
-                for (var i = 0; i < result.length; i++) {
-                    if ($(this).attr("name") == result[i]) {
-                        if (param[$(this).attr("name")]) {
-                            param[$(this).attr("name")] = "" + param[$(this).attr("name")] + "," + $(this).html() + "";
-                        } else {
-                            param[$(this).attr("name")] = $(this).html();
-                        }
-                    }
-                }
-            })
-            type = false;
-        }
-
-    })
-    if (type) {
-        Dialog_Error('请选择数据');
-    } else {
-        if (menuid) {
-            url += '&' + 'menuid' + '=' + menuid;
-        }
-        for (var i = 0; i < result.length; i++) {
-            endurl += '&' + result[i] + '=' + param[result[i]];
-
-        }
-        url += endurl;
-        $.ajax({
-            url: base + "/servlet/mainGateServlet" + url,
-            dataType: "json",
-            type: "get",
-            async: false,
-            success: function (data) {
-                if (data[0].responseCode == '' && data[0].responseMessage == '') {
-                    if (tbid == false) {
-                    } else if (tbid) {
-                        $(TABLE[tbid].table).relfush();
-                    } else {
-                        $(table).relfush();
-                    }
-                    $("#modal").modal("hide");
-                    $(".modal-content").empty();
-                    $.toast({
-                        heading: '成功提示',
-                        text: '操作成功',
-                        position: 'top-center',
-                        loaderBg: '#fff',
-                        icon: 'success',
-                        hideAfter: 2000,
-                        stack: 1
-                    });
-                } else {
-                    //add(".main-content", loadurl);
-                    $.toast({
-                        heading: '消息提示',
-                        text: data[0].responseMessage,
-                        position: 'top-center',
-                        loaderBg: '#fff',
-                        icon: 'error',
-                        hideAfter: 10000,
-                        stack: 1
-                    });
-                }
-            }
-        });
-    }
-}
-
 /**获取当前时间日期
  * 参数
  * 0  yy-mm-dd
@@ -1058,34 +883,6 @@ function tree_true(name, type, url, area) {
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="popover"]').popover();
 }
-
-
-function SYS_SelectSQL(sql, selid, datacode1, DATALABLE1) {
-    var b = sql;
-    var para = {
-        TRANSCODE: "SYS_SelectSQL",
-        USERCODE: "super",
-        JSONFLAG: "YES",
-        MOBILE: "YES",
-        isjson: "true",
-        sql: encodeURI(b),
-    }
-    var selinner = ""
-    var callback = function (data) {
-        var opts = "";
-        $.each(data, function (n, value) {
-            var opt = "";
-            opt += "<option value=\"" + value[datacode1] + "\">" + value[DATALABLE1] + "</option> ";
-            opts += opt;
-            return opts;
-        });
-        selinner = opts
-        selid.html(selinner)
-        return selinner;
-    }
-    asyncAjax(para, callback);
-}
-
 
 /**菜单跳转链接
  * 参数
@@ -1438,7 +1235,7 @@ var config = {
  * pageIndex 每页显示
  *
  */
-function pagecount(id, pageIndex, pageAllCount, pageSize) {
+function pageCreate(id, pageIndex, pageAllCount, pageSize) {
     var dd = TABLE[id];
     var table = dd.table;
     var para = dd.para;
@@ -1606,24 +1403,20 @@ function order(type, id) {
     var dd = TABLE[ids];
     var para = dd.para;
     var table = dd.table;
-    para["order"] = $(type).attr("name");
-    var ordertype = $(type).attr("class");
-    if (ordertype == "sorting_asc") {
-        para["sort_" + $(type).attr("name") + ""] = "0";
+    para.data.sortField = $(type).attr("name");
+    var orderType = $(type).attr("class");
+    if (orderType == "sorting_asc") {
+        para.data.sortValue = "ASC";
     } else {
-        para["sort_" + $(type).attr("name") + ""] = "1";
+        para.data.sortValue = "DESC";
     }
-    para["ordertype"] = ordertype;
     $(".ptrbody").html("");
     $(table).relfush();
-    var sortht = TABLE[ids]["para"];
-    //console.log("------sortht---");
-    //console.log(sortht);
-    $(".rows").find("th").each(function () {
+    $("#" + ids + "_1").find("th").each(function () {
         if ($(this).attr("name") == undefined) {
 
         } else {
-            if (sortht["sort_" + $(this).attr("name") + ""] == "1") {
+            if (para.data.sortField == $(type).attr("name") && para.data.sortValue == "DESC") {
                 $(this).attr("class", "sorting_asc");
             } else {
                 $(this).attr("class", "sorting");
@@ -1646,7 +1439,8 @@ function search(type, id) {
     para[config.pageIndex] = 1;
     var name = $(type).attr("id");
     var value = $(type).val();
-    para[name] = value;
+    para.data = {};
+    para.data[name] = value;
     $(table).relfush();
 }
 
@@ -1925,6 +1719,7 @@ $.fn.extend({
         table = $(this);
         var tabData = json;
         var para = tabData.data;
+        para.data = {};
         var map = {};
         map["para"] = para;
         map["table"] = table;
@@ -1994,50 +1789,56 @@ $.fn.extend({
 
                 } else {
                     if (columns[i].sort != "false") {
-                        theadhtml += '<th  class="' + order + '" tabindex="' + i + '" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="' + columns[i].name + ': activate to sort column descending" style="min-width: ' + columns[i].width + 'px;" name=' + columns[i].name + ' onclick="order(this,' + table.attr("id") + ')">' + columns[i].label + '</th>';
+                        theadhtml += '<th  class="' + order + '" tabindex="' + i + '" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="' + columns[i].name + ': activate to sort column descending" style="min-width: ' + columns[i].width + 'px;" name=' + columns[i].name + ' onclick="order(this, ' + table.attr("id") + ')">' + columns[i].label + '</th>';
                     } else {
                         theadhtml += '<th  class="' + order + '" tabindex="' + i + '" aria-controls="datatable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="' + columns[i].name + ': activate to sort column descending" style="min-width: ' + columns[i].width + 'px;" name=' + columns[i].name + '>' + columns[i].label + '</th>';
                     }
                 }
                 var value = columns[i].label;
-                switch (columns[i].type) {
-                    case 'text':
-                        value = '<td ><input type="text" style="min-width:' + columns[i].width + 'px;max-width:' + columns[i].width + 'px;" id=' + columns[i].name + ' placeholder="' + columns[i].label + '"  onchange="search(this,' + table.attr("id") + ')" class="form-control"></td>';
-                        break;
-                    case 'link':
-                        if (columns[i].url != "" && columns[i].name != "") {
+                console.log(columns[i].search)
+                if(columns[i].search == undefined){
+                    switch (columns[i].type) {
+                        case 'text':
                             value = '<td ><input type="text" style="min-width:' + columns[i].width + 'px;" id=' + columns[i].name + ' placeholder="' + columns[i].label + '"  onchange="search(this,' + table.attr("id") + ')" class="form-control"></td>';
-                        } else {
+                            break;
+                        case 'link':
+                            // if (columns[i].url != "" && columns[i].name != "") {
+                            //     value = '<td ><input type="text" style="min-width:' + columns[i].width + 'px;" id=' + columns[i].name + ' placeholder="' + columns[i].label + '"  onchange="search(this,' + table.attr("id") + ')" class="form-control"></td>';
+                            // } else {
+                            //     value = '<td ></td >';
+                            // }
                             value = '<td ></td >';
-                        }
-                        break;
-                    case 'select':
-                        var option = "";
-                        var displayName = "name";
-                        var valueName = "value";
-                        if (columns[i].option.displayName) {
-                            displayName = columns[i].option.displayName;
-                        }
-                        if (columns[i].option.valueName) {
-                            valueName = columns[i].option.valueName;
-                        }
-                        for (var j = 0; j < columns[i].option.data.length; j++) {
-                            option += '<option value="' + columns[i].option.data[j][valueName] + '">' + columns[i].option.data[j][displayName]  + '</option>';
-                        }
-                        value = '<td ><select name="simple"  style="min-width:' + columns[i].width + 'px;height:34px;font-size:14px"  onchange="search(this,' + table.attr("id") + ')" id="' + columns[i].name + '">'
-                            + '<option value="">请选择</option>' + option + '</select></td>';
-                        break;
-                    case 'date':
-                        value = '<td ><div class="input-group date" id="datetimepicker' + i + '" name="datetimepicker"><input  style="min-width:' + columns[i].width + 'px;"  id="' + columns[i].name + '" type="text" class="form-control" onchange="search(this,' + table.attr("id") + ')"><span class="input-group-addon" style="width: 40px;height: 34px;"><span class="glyphicon glyphicon-calendar"></span></span></div></td>';
-                        break;
-                    case 'hidden':
-                        tdval = '';
-                        break;
-                    case 'money':
-                        value = '<td ><input type="text" style="min-width:' + columns[i].width + 'px;" id=' + columns[i].name + ' placeholder="' + columns[i].label + '"  onchange="search(this,' + table.attr("id") + ')" class="form-control"></td>';
-                        break;
-                    default:
-                        value = "<td>" + columns[i].label + "</td>";
+                            break;
+                        case 'select':
+                            var option = "";
+                            var displayName = "name";
+                            var valueName = "value";
+                            if (columns[i].option.displayName) {
+                                displayName = columns[i].option.displayName;
+                            }
+                            if (columns[i].option.valueName) {
+                                valueName = columns[i].option.valueName;
+                            }
+                            for (var j = 0; j < columns[i].option.data.length; j++) {
+                                option += '<option value="' + columns[i].option.data[j][valueName] + '">' + columns[i].option.data[j][displayName] + '</option>';
+                            }
+                            value = '<td ><select name="simple" class="form-control" style="min-width:' + columns[i].width + 'px;height:34px;font-size:14px"  onchange="search(this,' + table.attr("id") + ')" id="' + columns[i].name + '">'
+                                + '<option value="">请选择</option>' + option + '</select></td>';
+                            break;
+                        case 'date':
+                            value = '<td ><div class="input-group date" id="datetimepicker' + i + '" name="datetimepicker"><input  style="min-width:' + columns[i].width + 'px;"  id="' + columns[i].name + '" type="text" class="form-control" onchange="search(this,' + table.attr("id") + ')"><span class="input-group-addon" style="width: 100px;height: 34px;"><span class="glyphicon glyphicon-calendar"></span></span></div></td>';
+                            break;
+                        case 'hidden':
+                            tdval = '';
+                            break;
+                        case 'money':
+                            value = '<td ><input type="text" style="min-width:' + columns[i].width + 'px;" id=' + columns[i].name + ' placeholder="' + columns[i].label + '"  onchange="search(this,' + table.attr("id") + ')" class="form-control"></td>';
+                            break;
+                        default:
+                            value = "<td>" + columns[i].label + "</td>";
+                    }
+                }else if(columns[i].search==false){
+                    value = '<td ></td >';
                 }
                 searchhtml += value;
             }
@@ -2230,103 +2031,116 @@ $.fn.extend({
                 radioClass: 'iradio_square-blue'
             });
             if (para.page == true && stat == true) {//分页
-                pagecount(table.attr("id"), para[config.pageIndex], res[config.pageAllCount], para[config.pageSize]);
+                pageCreate(table.attr("id"), para[config.pageIndex], res[config.pageAllCount], para[config.pageSize]);
             }
             $("div[name='datetimepicker']").each(function () {
                 $("#" + $(this).attr("id")).datetimepicker({
-                    minView: "month",//设置只显示到月份
-                    language: "zh-CN",
-                    format: "yyyy-mm-dd",//日期格式
-                    autoclose: true,//选中关闭
-                    todayBtn: true,//今日按钮
-                });
-            })
-            //键盘监听事件获取输入值进行模糊查询
-            $("." + table.attr("id") + "_1").find("input").keydown(function (event) {
-                if (event.keyCode === 13) {
-                    para.cur_pageno = 1;
-                    var name = $(this).attr("id");
-                    var value = $(this).val();
-                    para[name] = value;
-                    $(table).relfush();
-                }
-            });
-            //行点击事件
-            if (tabData.multipleSelect == true) {
-                $(table).find("tr").click(function () {
-                    if ($(this).find("#ck_id").is(":checked")) {
-                        $(this).find("#ck_id").iCheck('uncheck');
-                        $(this).css("background-color", "#ffffff");
-                    } else {
-                        $(this).find("#ck_id").iCheck('check');
-                        $(this).css("background-color", "#f5f5f5");
-                    }
-                })
-            }
-            if (tabData.onecheck == true || tabData.onlycheck == true) {
-                $(table).find("tr").click(function () {
-                    $(this).find("#ck_id").iCheck('check');
-                    $(this).css("background-color", "#f5f5f5");
-
-                })
-            }
-            ;
-            //hover事件
-            $(table).find("tr").hover(function () {
-                $(this).css("background-color", "#f5f5f5");
-            }, function () {
-                if ($(this).find("#ck_id").is(":checked")) {
-                    $(this).css("background-color", "#f5f5f5");
-                } else {
-                    $(this).css("background-color", "#ffffff");
-                }
-            });
-            if (tabData.multipleSelect == true) {
-                //多选框点击事件  全选事件
-                $(".iCheck-helper").click(function () {
-                    if ($(this).parent().find("input:first").attr('id') == "ck_id") {
-                        if ($(this).parent().find("#ck_id").is(":checked")) {
-                            $(this).parent().parent().parent().css("background-color", "#f5f5f5");
-                        } else {
-                            $(this).parent().parent().parent().css("background-color", "#ffffff");
-                        }
-                    }
-                    if ($(this).parent().find("input:first").attr('id') == "chkall") {
-                        if ($(this).parent().find("#chkall").is(":checked")) {
-                            $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('check');
-                            $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#f5f5f5");
-                            $(this).parent().parent().parent().parent().find("tr").css("background-color", "#ffffff")
-                        } else {
-                            $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('uncheck');
-                            $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#ffffff");
-                        }
-                    }
-                })
-            } else if (tabData.multipleSelect == "one") {
-                $(".table").find(".checkbox").each(function () {
-                    $(this).click(function () {
-                        var test = $(this).attr("checked");
-                        if (this.checked) {
-                            GetData(this.value);
-                            $(this).parent("div").siblings().children(".checkbox").each(function () {
-                                if (test == this.checked) {
-                                    this.checked = false;
+                    format: 'YYYY-MM-DD',
+                    locale: moment.locale('zh-cn'),
+                    defaultDate: new Date(),
+                    showClose:true,	//是否显示关闭 按钮
+                    viewMode: 'days',//天数模块展示，months则为以月展示
+                    daysOfWeekDisabled: false,//星期几 禁止选择,参数 [num],多个逗号隔开
+                    calendarWeeks: false,	//显示 周 是 今年第几周
+                    toolbarPlacement:'default', //工具摆放的位置，top 则为上，默认为底
+                    showTodayButton:false,	//是否工具栏 显示 直达今天天数的 按钮，默认false
+                    showClear:false, //是否 工具栏显示  清空 输入框  的按钮。默认false
+                            });
+                        })
+                        //键盘监听事件获取输入值进行模糊查询
+                        $("." + table.attr("id") + "_1").find("input").keydown(function (event) {
+                            if (event.keyCode === 13) {
+                                para.cur_pageno = 1;
+                                var name = $(this).attr("id");
+                                var value = $(this).val();
+                                para[name] = value;
+                                $(table).relfush();
+                            }
+                        });
+                        //行点击事件
+                        if (tabData.multipleSelect == true) {
+                            $(table).find("tr").click(function () {
+                                if ($(this).find("#ck_id").is(":checked")) {
+                                    $(this).find("#ck_id").iCheck('uncheck');
+                                    $(this).css("background-color", "#ffffff");
+                                } else {
+                                    $(this).find("#ck_id").iCheck('check');
+                                    $(this).css("background-color", "#f5f5f5");
                                 }
+                            })
+                        }
+                        if (tabData.onecheck == true || tabData.onlycheck == true) {
+                            $(table).find("tr").click(function () {
+                                $(this).find("#ck_id").iCheck('check');
+                                $(this).css("background-color", "#f5f5f5");
+
+                            })
+                        }
+                        ;
+                        //hover事件
+                        $(table).find("tr").hover(function () {
+                            $(this).css("background-color", "#f5f5f5");
+                        }, function () {
+                            if ($(this).find("#ck_id").is(":checked")) {
+                                $(this).css("background-color", "#f5f5f5");
+                            } else {
+                                $(this).css("background-color", "#ffffff");
+                            }
+                        });
+                        if (tabData.multipleSelect == true) {
+                            //多选框点击事件  全选事件
+                            $(".iCheck-helper").click(function () {
+                                if ($(this).parent().find("input:first").attr('id') == "ck_id") {
+                                    if ($(this).parent().find("#ck_id").is(":checked")) {
+                                        $(this).parent().parent().parent().css("background-color", "#f5f5f5");
+                                    } else {
+                                        $(this).parent().parent().parent().css("background-color", "#ffffff");
+                                    }
+                                }
+                                if ($(this).parent().find("input:first").attr('id') == "chkall") {
+                                    if ($(this).parent().find("#chkall").is(":checked")) {
+                                        $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('check');
+                                        $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#f5f5f5");
+                                        $(this).parent().parent().parent().parent().find("tr").css("background-color", "#ffffff")
+                                    } else {
+                                        $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('uncheck');
+                                        $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#ffffff");
+                                    }
+                                }
+                            })
+                        } else if (tabData.multipleSelect == "one") {
+                            $(".table").find(".checkbox").each(function () {
+                                $(this).click(function () {
+                                    var test = $(this).attr("checked");
+                                    if (this.checked) {
+                                        GetData(this.value);
+                                        $(this).parent("div").siblings().children(".checkbox").each(function () {
+                                            if (test == this.checked) {
+                                                this.checked = false;
+                                            }
+                                        });
+                                    }
+                                });
                             });
                         }
-                    });
-                });
-            }
-            /*if (tabData.page == true) {
-                $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
-                $(table).parent().css("height", config.mainContentHeight - 172);
-            } else {
-                $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
-                $(table).parent().css("height", config.mainContentHeight - 107);
-            }
-            //tb赋值
-            $(table).parent().width($("." + table.attr("id") + "_1").width());
-            $(table).parent().width($("." + table.attr("id") + "_1").width());*/
+                        /*if (tabData.page == true) {
+                            $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
+                            $(table).parent().css("height", config.mainContentHeight - 172);
+                        } else {
+                            $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
+                            $(table).parent().css("height", config.mainContentHeight - 107);
+                        }
+                        //tb赋值
+                        $(table).parent().width($("." + table.attr("id") + "_1").width());
+                        $(table).parent().width($("." + table.attr("id") + "_1").width());*/
+            $(window).bind("resize",function(){
+                if($(table)){
+                    $(table).parent().width($("#" + table.attr("id") + "_1").width());
+                    if (TABLE[table.attr("id")].para.page) {
+                        $(table).parent().next().css("width",$("#" + table.attr("id") + "_1").width());
+                    }
+                }
+            });
         });
         if (tabData.onload && typeof tabData.onload == "function") {
             tabData.onload();
@@ -2350,6 +2164,9 @@ $.fn.extend({
             } else {
                 url += "?" + config.pageIndex + "=" + (para.pageIndex ? para.pageIndex : 1) + "&" + config.pageSize + "=" + (para.pageSize ? para.pageSize : 10);
             }
+        }
+        for (var name in para.data) {
+            url += "&" + name + "=" + para.data[name];
         }
         $.get(url, function (res) {
             if (res.code == 0 && res.msg == '') {
@@ -2545,7 +2362,7 @@ $.fn.extend({
             // $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
             // $(table).parent().css("height", config.mainContentHeight - 172);
             if (para.page == true) {//分页
-                pagecount(table.attr("id"), para[config.pageIndex], res[config.pageAllCount], para[config.pageSize]);
+                pageCreate(table.attr("id"), para[config.pageIndex], res[config.pageAllCount], para[config.pageSize]);
             }
         }, function () {
 

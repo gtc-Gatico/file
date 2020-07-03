@@ -1,16 +1,16 @@
 package com.gatico.file.vo;
 
 import com.alibaba.fastjson.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.data.domain.Sort;
 
 public class BaseVo {
     public static final Integer SUCCESS_CODE = 0;
     private Integer code = 0;
     private String msg ="";
     private Object data = new Object();
-    private Integer total=0;
+    private Long total=0L;
+    private String sortField = "id";
+    private Sort.Direction sortValue = Sort.Direction.ASC;
     protected BaseVo() {
 
     }
@@ -83,12 +83,28 @@ public class BaseVo {
         this.data = data;
     }
 
-    public Integer getTotal() {
+    public Long getTotal() {
         return total;
     }
 
-    public void setTotal(Integer total) {
+    public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
+    public Sort.Direction getSortValue() {
+        return sortValue;
+    }
+
+    public void setSortValue(Sort.Direction sortValue) {
+        this.sortValue = sortValue;
     }
 
     @Override
