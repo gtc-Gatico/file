@@ -1,7 +1,5 @@
 package com.gatico.file.vo;
 
-import com.gatico.file.entity.FileEntity;
-
 import java.sql.Timestamp;
 
 public class FileVo {
@@ -15,6 +13,7 @@ public class FileVo {
 
     public FileVo() {
     }
+
 
     public FileVo(Long id, String name, Double length, String path, Timestamp time, String type) {
         this.id = id;

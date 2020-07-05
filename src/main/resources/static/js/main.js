@@ -11,6 +11,10 @@ jQuery.extend({
             async: false,
             dataType: "json",
             success: function (msg) {
+                console.log(msg)
+                if (msg.code == 401) {
+                    window.location = "../index.html";
+                }
                 callback(msg);
             },
             error: function (xhr, textstatus, thrown) {
@@ -27,6 +31,9 @@ jQuery.extend({
             async: false,
             data: data,
             success: function (msg) {
+                if (msg.code == 401) {
+                    window.location = "../index.html";
+                }
                 callback(msg);
             },
             error: function (xhr, textstatus, thrown) {
@@ -43,6 +50,9 @@ jQuery.extend({
             async: false,
             data: data,
             success: function (msg) {
+                if (msg.code == 401) {
+                    window.location = "../index.html";
+                }
                 callback(msg);
             },
             error: function (xhr, textstatus, thrown) {
@@ -59,6 +69,9 @@ jQuery.extend({
             async: false,
             data: data,
             success: function (msg) {
+                if (msg.code == 401) {
+                    window.location = "../index.html";
+                }
                 callback(msg);
             },
             error: function (xhr, textstatus, thrown) {
@@ -75,6 +88,9 @@ jQuery.extend({
             async: false,
             data: data,
             success: function (msg) {
+                if (msg.code == 401) {
+                    window.location = "../index.html";
+                }
                 callback(msg);
             },
             error: function (xhr, textstatus, thrown) {
@@ -124,23 +140,36 @@ var table;
 function login() {
     var name = $("input[name='name']").val();
     var password = $("input[name='password']").val();
+    if (name == "") {
+        layer.msg("请输入用户名");
+        return false;
+    }
+    if (password == "") {
+        layer.msg("请输入密码");
+        return false;
+    }
+    layer.load(0, {shade: [0.3, '#fff']}); //0代表加载的风格，支持0-2
     var data = {
         name: name,
         password: $.md5($.md5(password))
     };
     $.post("/user/login", JSON.stringify(data), function (res) {
         layer.msg(res.msg)
-        if (res.code == 0) {
-            $.cookie("username", res.data.nickName, {expires: 30});
-            $.cookie("uuid", res.data.uuid, {expires: 30});
-            $.cookie("role", res.data.role, {expires: 30});
-            if (res.data.role == "admin") {
-                window.location.href = "../admin/admin.html";
-            } else {
-                window.location.href = "html/index.html";
+        setTimeout(function () {
+            if (res.code == 0) {
+                $.cookie("username", res.data.nickName, {expires: 30});
+                $.cookie("uuid", res.data.uuid, {expires: 30});
+                $.cookie("role", res.data.role, {expires: 30});
+                if (res.data.role == "admin") {
+                    window.location.href = "../admin/admin.html";
+                } else {
+                    window.location.href = "html/index.html";
+                }
             }
-        }
+            layer.closeAll();
+        }, 1000);
     });
+
 }
 
 function logout() {
@@ -178,7 +207,7 @@ var throughputDisplay = function (data) {
 };
 
 /*获取字符串的宽度*/
-String.prototype.width = function(font) {
+String.prototype.width = function (font) {
     var f = font || '12px arial',
         o = $('<div>' + this + '</div>')
             .css({'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden', 'font': f})

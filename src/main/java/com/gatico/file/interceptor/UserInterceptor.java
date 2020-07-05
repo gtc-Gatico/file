@@ -49,11 +49,11 @@ public class UserInterceptor implements HandlerInterceptor {
                 localUser.set(userEntity);
                 return true;
             }else{
-                BaseVo errorVo = BaseVo.getErrorVo(500, "请先登录");
+                BaseVo errorVo = BaseVo.getErrorVo(401, "请先登录");
                 response.getWriter().write(gson.toJson(errorVo));
             }
         }else{
-            BaseVo errorVo = BaseVo.getErrorVo(500, "请先登录");
+            BaseVo errorVo = BaseVo.getErrorVo(401, "请先登录");
             response.getWriter().write(gson.toJson(errorVo));
         }
         return false;

@@ -11,6 +11,7 @@ import com.gatico.file.interceptor.UserInterceptor;
 import com.gatico.file.vo.BaseVo;
 import com.gatico.file.vo.DownLoadFileVo;
 import com.gatico.file.vo.FileVo;
+import com.gatico.file.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -57,9 +58,9 @@ public class FileService {
     @Autowired
     private UserInterceptor userInterceptor;
 
-    public BaseVo getUserFile(FileBean fileBean) {
+    public PageVo getUserFile(FileBean fileBean) {
         UserEntity userEntity = userInterceptor.getCurrentUser();
-        BaseVo successVo = BaseVo.getSuccessVo();
+        PageVo successVo = new PageVo();
         Specification<FileEntity> spec = new Specification<FileEntity>() {
             @Override
             public Predicate toPredicate(Root<FileEntity> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -76,6 +77,11 @@ public class FileService {
                 if (fileBean.getName() != null && !fileBean.getName().equals("")) { //添加断言
                     Predicate name = criteriaBuilder.like(root.get("name").as(String.class), "%" + fileBean.getName() + "%");
                     predicates.add(name);
+                }
+
+                if (fileBean.getTime() != null) { //添加断言
+                    Predicate time = criteriaBuilder.greaterThanOrEqualTo(root.get("time").as(Timestamp.class), fileBean.getTime());
+                    predicates.add(time);
                 }
 
                 return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -95,6 +101,7 @@ public class FileService {
                     fileEntity.getType()
             ));
         });
+
         successVo.setData(fileVos);
         successVo.setTotal(fileDao.count(spec));
         return successVo;

@@ -1796,7 +1796,7 @@ $.fn.extend({
                 }
                 var value = columns[i].label;
                 console.log(columns[i].search)
-                if(columns[i].search == undefined){
+                if (columns[i].search == undefined) {
                     switch (columns[i].type) {
                         case 'text':
                             value = '<td ><input type="text" style="min-width:' + columns[i].width + 'px;" id=' + columns[i].name + ' placeholder="' + columns[i].label + '"  onchange="search(this,' + table.attr("id") + ')" class="form-control"></td>';
@@ -1837,7 +1837,7 @@ $.fn.extend({
                         default:
                             value = "<td>" + columns[i].label + "</td>";
                     }
-                }else if(columns[i].search==false){
+                } else if (columns[i].search == false) {
                     value = '<td ></td >';
                 }
                 searchhtml += value;
@@ -2035,109 +2035,109 @@ $.fn.extend({
             }
             $("div[name='datetimepicker']").each(function () {
                 $("#" + $(this).attr("id")).datetimepicker({
-                    format: 'YYYY-MM-DD',
+                    format: 'YYYY-MM-DD HH:mm:ss',
                     locale: moment.locale('zh-cn'),
-                    defaultDate: new Date(),
-                    showClose:true,	//是否显示关闭 按钮
+                    //defaultDate: new Date(),
+                    showClose: true,	//是否显示关闭 按钮
                     viewMode: 'days',//天数模块展示，months则为以月展示
                     daysOfWeekDisabled: false,//星期几 禁止选择,参数 [num],多个逗号隔开
                     calendarWeeks: false,	//显示 周 是 今年第几周
-                    toolbarPlacement:'default', //工具摆放的位置，top 则为上，默认为底
-                    showTodayButton:false,	//是否工具栏 显示 直达今天天数的 按钮，默认false
-                    showClear:false, //是否 工具栏显示  清空 输入框  的按钮。默认false
-                            });
-                        })
-                        //键盘监听事件获取输入值进行模糊查询
-                        $("." + table.attr("id") + "_1").find("input").keydown(function (event) {
-                            if (event.keyCode === 13) {
-                                para.cur_pageno = 1;
-                                var name = $(this).attr("id");
-                                var value = $(this).val();
-                                para[name] = value;
-                                $(table).relfush();
-                            }
-                        });
-                        //行点击事件
-                        if (tabData.multipleSelect == true) {
-                            $(table).find("tr").click(function () {
-                                if ($(this).find("#ck_id").is(":checked")) {
-                                    $(this).find("#ck_id").iCheck('uncheck');
-                                    $(this).css("background-color", "#ffffff");
-                                } else {
-                                    $(this).find("#ck_id").iCheck('check');
-                                    $(this).css("background-color", "#f5f5f5");
-                                }
-                            })
-                        }
-                        if (tabData.onecheck == true || tabData.onlycheck == true) {
-                            $(table).find("tr").click(function () {
-                                $(this).find("#ck_id").iCheck('check');
-                                $(this).css("background-color", "#f5f5f5");
+                    toolbarPlacement: 'default', //工具摆放的位置，top 则为上，默认为底
+                    showTodayButton: false,	//是否工具栏 显示 直达今天天数的 按钮，默认false
+                    showClear: false, //是否 工具栏显示  清空 输入框  的按钮。默认false
+                });
+            })
+            //键盘监听事件获取输入值进行模糊查询
+            $("." + table.attr("id") + "_1").find("input").keydown(function (event) {
+                if (event.keyCode === 13) {
+                    para.cur_pageno = 1;
+                    var name = $(this).attr("id");
+                    var value = $(this).val();
+                    para.data[name] = value;
+                    $(table).relfush();
+                }
+            });
+            //行点击事件
+            if (tabData.multipleSelect == true) {
+                $(table).find("tr").click(function () {
+                    if ($(this).find("#ck_id").is(":checked")) {
+                        $(this).find("#ck_id").iCheck('uncheck');
+                        $(this).css("background-color", "#ffffff");
+                    } else {
+                        $(this).find("#ck_id").iCheck('check');
+                        $(this).css("background-color", "#f5f5f5");
+                    }
+                })
+            }
+            if (tabData.onecheck == true || tabData.onlycheck == true) {
+                $(table).find("tr").click(function () {
+                    $(this).find("#ck_id").iCheck('check');
+                    $(this).css("background-color", "#f5f5f5");
 
-                            })
+                })
+            }
+            ;
+            //hover事件
+            $(table).find("tr").hover(function () {
+                $(this).css("background-color", "#f5f5f5");
+            }, function () {
+                if ($(this).find("#ck_id").is(":checked")) {
+                    $(this).css("background-color", "#f5f5f5");
+                } else {
+                    $(this).css("background-color", "#ffffff");
+                }
+            });
+            if (tabData.multipleSelect == true) {
+                //多选框点击事件  全选事件
+                $(".iCheck-helper").click(function () {
+                    if ($(this).parent().find("input:first").attr('id') == "ck_id") {
+                        if ($(this).parent().find("#ck_id").is(":checked")) {
+                            $(this).parent().parent().parent().css("background-color", "#f5f5f5");
+                        } else {
+                            $(this).parent().parent().parent().css("background-color", "#ffffff");
                         }
-                        ;
-                        //hover事件
-                        $(table).find("tr").hover(function () {
-                            $(this).css("background-color", "#f5f5f5");
-                        }, function () {
-                            if ($(this).find("#ck_id").is(":checked")) {
-                                $(this).css("background-color", "#f5f5f5");
-                            } else {
-                                $(this).css("background-color", "#ffffff");
-                            }
-                        });
-                        if (tabData.multipleSelect == true) {
-                            //多选框点击事件  全选事件
-                            $(".iCheck-helper").click(function () {
-                                if ($(this).parent().find("input:first").attr('id') == "ck_id") {
-                                    if ($(this).parent().find("#ck_id").is(":checked")) {
-                                        $(this).parent().parent().parent().css("background-color", "#f5f5f5");
-                                    } else {
-                                        $(this).parent().parent().parent().css("background-color", "#ffffff");
-                                    }
+                    }
+                    if ($(this).parent().find("input:first").attr('id') == "chkall") {
+                        if ($(this).parent().find("#chkall").is(":checked")) {
+                            $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('check');
+                            $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#f5f5f5");
+                            $(this).parent().parent().parent().parent().find("tr").css("background-color", "#ffffff")
+                        } else {
+                            $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('uncheck');
+                            $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#ffffff");
+                        }
+                    }
+                })
+            } else if (tabData.multipleSelect == "one") {
+                $(".table").find(".checkbox").each(function () {
+                    $(this).click(function () {
+                        var test = $(this).attr("checked");
+                        if (this.checked) {
+                            GetData(this.value);
+                            $(this).parent("div").siblings().children(".checkbox").each(function () {
+                                if (test == this.checked) {
+                                    this.checked = false;
                                 }
-                                if ($(this).parent().find("input:first").attr('id') == "chkall") {
-                                    if ($(this).parent().find("#chkall").is(":checked")) {
-                                        $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('check');
-                                        $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#f5f5f5");
-                                        $(this).parent().parent().parent().parent().find("tr").css("background-color", "#ffffff")
-                                    } else {
-                                        $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox').iCheck('uncheck');
-                                        $(this).parent().parent().parent().parent().parent().parent().parent().find("tr").css("background-color", "#ffffff");
-                                    }
-                                }
-                            })
-                        } else if (tabData.multipleSelect == "one") {
-                            $(".table").find(".checkbox").each(function () {
-                                $(this).click(function () {
-                                    var test = $(this).attr("checked");
-                                    if (this.checked) {
-                                        GetData(this.value);
-                                        $(this).parent("div").siblings().children(".checkbox").each(function () {
-                                            if (test == this.checked) {
-                                                this.checked = false;
-                                            }
-                                        });
-                                    }
-                                });
                             });
                         }
-                        /*if (tabData.page == true) {
-                            $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
-                            $(table).parent().css("height", config.mainContentHeight - 172);
-                        } else {
-                            $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
-                            $(table).parent().css("height", config.mainContentHeight - 107);
-                        }
-                        //tb赋值
-                        $(table).parent().width($("." + table.attr("id") + "_1").width());
-                        $(table).parent().width($("." + table.attr("id") + "_1").width());*/
-            $(window).bind("resize",function(){
-                if($(table)){
+                    });
+                });
+            }
+            /*if (tabData.page == true) {
+                $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
+                $(table).parent().css("height", config.mainContentHeight - 172);
+            } else {
+                $(table).parents().find(".panel-body").css("height", config.mainContentHeight);
+                $(table).parent().css("height", config.mainContentHeight - 107);
+            }
+            //tb赋值
+            $(table).parent().width($("." + table.attr("id") + "_1").width());
+            $(table).parent().width($("." + table.attr("id") + "_1").width());*/
+            $(window).bind("resize", function () {
+                if ($(table)) {
                     $(table).parent().width($("#" + table.attr("id") + "_1").width());
                     if (TABLE[table.attr("id")].para.page) {
-                        $(table).parent().next().css("width",$("#" + table.attr("id") + "_1").width());
+                        $(table).parent().next().css("width", $("#" + table.attr("id") + "_1").width());
                     }
                 }
             });
